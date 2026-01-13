@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/auth_provider.dart';
-import '../utils/app_theme.dart';
 
 class OnboardingScreen extends ConsumerWidget {
   const OnboardingScreen({super.key});
@@ -85,7 +84,7 @@ class OnboardingScreen extends ConsumerWidget {
                 const Spacer(flex: 2),
                 
                 // Get Started Button
-                Container(
+                SizedBox(
                   width: double.infinity,
                   height: 56,
                   child: ElevatedButton(
