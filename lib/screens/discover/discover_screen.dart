@@ -296,7 +296,7 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
   }
 
   void _showUserDetails(UserModel user) {
-    showModalBottomSheet(
+    showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
@@ -438,7 +438,7 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
 
   void _showFilters() {
     // Show filters bottom sheet
-    showModalBottomSheet(
+    showModalBottomSheet<void>(
       context: context,
       builder: (context) => Container(
         padding: const EdgeInsets.all(24),

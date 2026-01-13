@@ -47,14 +47,14 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   Future<void> _initializeApp() async {
     // Start animations
     _heartController.forward();
-    await Future.delayed(const Duration(milliseconds: 500));
+    await Future<void>.delayed(const Duration(milliseconds: 500));
     _textController.forward();
     
     // Initialize app services
     await ref.read(authProvider.notifier).initializeAuth();
     
     // Wait for minimum splash duration
-    await Future.delayed(const Duration(milliseconds: 2500));
+    await Future<void>.delayed(const Duration(milliseconds: 2500));
     
     // Navigate based on auth state
     if (mounted) {

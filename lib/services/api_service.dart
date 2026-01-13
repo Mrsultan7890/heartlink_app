@@ -46,7 +46,7 @@ abstract class ApiService {
           final newToken = await _storage.read(key: AppConstants.accessTokenKey);
           if (newToken != null) {
             error.requestOptions.headers['Authorization'] = 'Bearer $newToken';
-            final response = await _dio.fetch(error.requestOptions);
+            final response = await _dio.fetch<Map<String, dynamic>>(error.requestOptions);
             handler.resolve(response);
             return;
           }
@@ -64,7 +64,7 @@ abstract class ApiService {
     try {
       final refreshToken = await _storage.read(key: AppConstants.refreshTokenKey);
       if (refreshToken != null) {
-        final response = await _dio.post(
+        final response = await _dio.post<Map<String, dynamic>>(
           '${AppConstants.baseUrl}${AppConstants.apiVersion}/auth/refresh',
           data: {'refresh_token': refreshToken},
         );
