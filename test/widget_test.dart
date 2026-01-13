@@ -11,5 +11,8 @@ void main() {
 
     // Verify that our app starts without crashing
     expect(find.byType(MaterialApp), findsOneWidget);
+    
+    // Wait for any async operations
+    await tester.pumpAndSettle();
   });
 }
