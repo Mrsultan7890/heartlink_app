@@ -23,25 +23,21 @@ jobs:
         channel: 'stable'
         
     - name: Get dependencies
-      working-directory: ./heartlink_app
       run: flutter pub get
       
     - name: Generate code
-      working-directory: ./heartlink_app
       run: flutter packages pub run build_runner build --delete-conflicting-outputs
       
     - name: Analyze code
-      working-directory: ./heartlink_app
       run: flutter analyze
       
     - name: Run tests
-      working-directory: ./heartlink_app
       run: flutter test --coverage
       
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3
       with:
-        file: ./heartlink_app/coverage/lcov.info
+        file: ./coverage/lcov.info
         
   # Android Build
   build-android:
@@ -67,32 +63,28 @@ jobs:
         channel: 'stable'
         
     - name: Get dependencies
-      working-directory: ./heartlink_app
       run: flutter pub get
       
     - name: Generate code
-      working-directory: ./heartlink_app
       run: flutter packages pub run build_runner build --delete-conflicting-outputs
       
     - name: Build APK
-      working-directory: ./heartlink_app
       run: flutter build apk --release
       
     - name: Build App Bundle
-      working-directory: ./heartlink_app
       run: flutter build appbundle --release
       
     - name: Upload APK artifact
       uses: actions/upload-artifact@v3
       with:
         name: android-apk
-        path: heartlink_app/build/app/outputs/flutter-apk/app-release.apk
+        path: build/app/outputs/flutter-apk/app-release.apk
         
     - name: Upload AAB artifact
       uses: actions/upload-artifact@v3
       with:
         name: android-aab
-        path: heartlink_app/build/app/outputs/bundle/release/app-release.aab
+        path: build/app/outputs/bundle/release/app-release.aab
 
   # iOS Build
   build-ios:
@@ -112,22 +104,19 @@ jobs:
         channel: 'stable'
         
     - name: Get dependencies
-      working-directory: ./heartlink_app
       run: flutter pub get
       
     - name: Generate code
-      working-directory: ./heartlink_app
       run: flutter packages pub run build_runner build --delete-conflicting-outputs
       
     - name: Build iOS (no codesign)
-      working-directory: ./heartlink_app
       run: flutter build ios --release --no-codesign
       
     - name: Upload iOS artifact
       uses: actions/upload-artifact@v3
       with:
         name: ios-build
-        path: heartlink_app/build/ios/iphoneos/Runner.app
+        path: build/ios/iphoneos/Runner.app
 
   # Web Build
   build-web:
@@ -146,15 +135,12 @@ jobs:
         channel: 'stable'
         
     - name: Get dependencies
-      working-directory: ./heartlink_app
       run: flutter pub get
       
     - name: Generate code
-      working-directory: ./heartlink_app
       run: flutter packages pub run build_runner build --delete-conflicting-outputs
       
     - name: Build Web
-      working-directory: ./heartlink_app
       run: flutter build web --release
       
     - name: Deploy to GitHub Pages
@@ -162,7 +148,7 @@ jobs:
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./heartlink_app/build/web
+        publish_dir: ./build/web
 
   # Backend Deployment
   deploy-backend:
@@ -240,6 +226,8 @@ jobs:
   security-scan:
     name: Security Scan
     runs-on: ubuntu-latest
+    permissions:
+      security-events: write
     
     steps:
     - name: Checkout code
@@ -254,9 +242,10 @@ jobs:
         output: 'trivy-results.sarif'
         
     - name: Upload Trivy scan results
-      uses: github/codeql-action/upload-sarif@v2
+      uses: github/codeql-action/upload-sarif@v3
       with:
         sarif_file: 'trivy-results.sarif'
+      continue-on-error: true
 
   # Performance Testing
   performance-test:
