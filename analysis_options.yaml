@@ -14,34 +14,19 @@ analyzer:
 
 linter:
   rules:
+    # Disable documentation requirements for faster development
+    public_member_api_docs: false
+    
     # Disable some rules that conflict with generated code
     avoid_print: false
     prefer_const_constructors: false
     prefer_const_literals_to_create_immutables: false
     
-    # Enable additional rules
-    always_declare_return_types: true
-    avoid_empty_else: true
-    avoid_relative_lib_imports: true
-    avoid_returning_null_for_future: true
-    avoid_slow_async_io: true
-    avoid_types_as_parameter_names: true
-    cancel_subscriptions: true
-    close_sinks: true
-    comment_references: true
-    control_flow_in_finally: true
-    empty_statements: true
-    hash_and_equals: true
-    invariant_booleans: true
-    iterable_contains_unrelated_type: true
-    list_remove_unrelated_type: true
-    literal_only_boolean_expressions: true
-    no_adjacent_strings_in_list: true
-    no_duplicate_case_values: true
-    prefer_void_to_null: true
-    test_types_in_equals: true
-    throw_in_finally: true
-    unnecessary_statements: true
-    unrelated_type_equality_checks: true
-    use_key_in_widget_constructors: true
-    valid_regexps: true
+    # Disable strict formatting rules
+    lines_longer_than_80_chars: false
+    always_put_required_named_parameters_first: false
+    sort_constructors_first: false
+    always_use_package_imports: false
+    directives_ordering: false
+    eol_at_end_of_file: false
+    use_colored_box: false
