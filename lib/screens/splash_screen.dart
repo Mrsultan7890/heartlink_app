@@ -75,7 +75,11 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
-          gradient: AppTheme.primaryGradient,
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xFFFF6B6B), Color(0xFFFF8E8E), Color(0xFFFFB3B3)],
+          ),
         ),
         child: SafeArea(
           child: Column(
