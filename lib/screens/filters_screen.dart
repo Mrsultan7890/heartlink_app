@@ -336,16 +336,9 @@ class _InterestsSelectionScreenState extends ConsumerState<InterestsSelectionScr
     });
 
     try {
-      await ApiService.updateInterests(selectedInterests);
+      final request = InterestsUpdateRequest(interests: selectedInterests);
+      await ApiService.instance.updateInterests(request);
       
-      // Update user provider
-      final currentUser = ref.read(userProvider);
-      if (currentUser != null) {
-        ref.read(userProvider.notifier).updateUser(
-          currentUser.copyWith(interests: selectedInterests),
-        );
-      }
-
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Interests updated successfully!')),
@@ -499,16 +492,9 @@ class _RelationshipIntentScreenState extends ConsumerState<RelationshipIntentScr
     });
 
     try {
-      await ApiService.updateRelationshipIntent(selectedIntent!);
+      final request = RelationshipIntentRequest(intent: selectedIntent!);
+      await ApiService.instance.updateRelationshipIntent(request);
       
-      // Update user provider
-      final currentUser = ref.read(userProvider);
-      if (currentUser != null) {
-        ref.read(userProvider.notifier).updateUser(
-          currentUser.copyWith(relationshipIntent: selectedIntent),
-        );
-      }
-
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Relationship intent updated!')),
