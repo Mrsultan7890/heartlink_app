@@ -1,18 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/user_model.dart';
+import '../providers/auth_provider.dart';
 
-class UserNotifier extends StateNotifier<UserModel?> {
-  UserNotifier() : super(null);
-
-  void updateUser(UserModel user) {
-    state = user;
-  }
-
-  void clearUser() {
-    state = null;
-  }
-}
-
-final userProvider = StateNotifierProvider<UserNotifier, UserModel?>((ref) {
-  return UserNotifier();
+final userProvider = Provider<UserModel?>((ref) {
+  return ref.watch(authProvider).user;
 });
