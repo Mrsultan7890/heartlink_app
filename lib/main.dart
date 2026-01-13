@@ -74,7 +74,7 @@ class HeartLinkApp extends ConsumerWidget {
       builder: (context, child) {
         return MediaQuery(
           data: MediaQuery.of(context).copyWith(
-            textScaler: const TextScaler.linear(1.0), // Prevent text scaling
+            textScaler: TextScaler.noScaling, // Prevent text scaling
           ),
           child: child!,
         );
