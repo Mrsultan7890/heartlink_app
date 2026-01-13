@@ -17,8 +17,24 @@ linter:
     prefer_const_constructors: false
     lines_longer_than_80_chars: false
     sort_pub_dependencies: false
-    unused_import: false
-    unused_local_variable: false
     always_use_package_imports: false
     directives_ordering: false
     eol_at_end_of_file: false
+    prefer_single_quotes: false
+    require_trailing_commas: false
+    sort_constructors_first: false
+    always_put_required_named_parameters_first: false
+    avoid_redundant_argument_values: false
+    deprecated_member_use: false
+    prefer_int_literals: false
+    omit_local_variable_types: false
+    avoid_equals_and_hash_code_on_mutable_classes: false
+    avoid_positional_boolean_parameters: false
+    unawaited_futures: false
+    avoid_escaping_inner_quotes: false
+    prefer_const_literals_to_create_immutables: false
+    unnecessary_breaks: false
+    unnecessary_lambdas: false
+    avoid_dynamic_calls: false
+    unnecessary_await_in_return: false
+    use_colored_box: false
