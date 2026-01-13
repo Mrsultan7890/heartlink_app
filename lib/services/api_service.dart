@@ -185,11 +185,11 @@ class RegisterRequest {
 
 @JsonSerializable()
 class LoginRequest {
-  final String username; // API expects username field for email
+  @JsonKey(name: 'username')
+  final String email;
   final String password;
   
-  LoginRequest({required String email, required this.password})
-      : username = email;
+  LoginRequest({required this.email, required this.password});
   
   factory LoginRequest.fromJson(Map<String, dynamic> json) =>
       _$LoginRequestFromJson(json);
