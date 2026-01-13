@@ -1,25 +1,25 @@
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../utils/constants.dart';
 
 class AuthService {
-  static const _storage = FlutterSecureStorage();
-  
   static Future<void> initialize() async {
     // Initialize authentication service
     print('AuthService initialized');
   }
   
   static Future<String?> getAccessToken() async {
-    return await _storage.read(key: AppConstants.accessTokenKey);
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(AppConstants.accessTokenKey);
   }
   
   static Future<void> saveAccessToken(String token) async {
-    await _storage.write(key: AppConstants.accessTokenKey, value: token);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(AppConstants.accessTokenKey, token);
   }
   
   static Future<void> clearTokens() async {
-    await _storage.deleteAll();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
   }
   
   static Future<bool> isLoggedIn() async {

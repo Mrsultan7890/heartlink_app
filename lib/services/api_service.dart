@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/user_model.dart';
 import '../models/match_model.dart';
@@ -16,7 +16,6 @@ abstract class ApiService {
   
   static late ApiService _instance;
   static late Dio _dio;
-  static const _storage = FlutterSecureStorage();
   
   static Future<void> initialize() async {
     _dio = Dio();
@@ -31,7 +30,8 @@ abstract class ApiService {
     _dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) async {
         // Add auth token
-        final token = await _storage.read(key: AppConstants.accessTokenKey);
+        final prefs = await SharedPreferences.getInstance();
+        final token = prefs.getString(AppConstants.accessTokenKey);
         if (token != null) {
           options.headers['Authorization'] = 'Bearer $token';
         }
@@ -43,7 +43,8 @@ abstract class ApiService {
         if (error.response?.statusCode == 401) {
           await _handleTokenRefresh();
           // Retry request
-          final newToken = await _storage.read(key: AppConstants.accessTokenKey);
+          final prefs = await SharedPreferences.getInstance();
+          final newToken = prefs.getString(AppConstants.accessTokenKey);
           if (newToken != null) {
             error.requestOptions.headers['Authorization'] = 'Bearer $newToken';
             final response = await _dio.fetch(error.requestOptions);
@@ -62,7 +63,8 @@ abstract class ApiService {
   
   static Future<void> _handleTokenRefresh() async {
     try {
-      final refreshToken = await _storage.read(key: AppConstants.refreshTokenKey);
+      final prefs = await SharedPreferences.getInstance();
+      final refreshToken = prefs.getString(AppConstants.refreshTokenKey);
       if (refreshToken != null) {
         final response = await _dio.post(
           '${AppConstants.baseUrl}${AppConstants.apiVersion}/auth/refresh',
@@ -70,11 +72,12 @@ abstract class ApiService {
         );
         
         final newToken = response.data['access_token'];
-        await _storage.write(key: AppConstants.accessTokenKey, value: newToken);
+        await prefs.setString(AppConstants.accessTokenKey, newToken);
       }
     } catch (e) {
       // Clear tokens and redirect to login
-      await _storage.deleteAll();
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.clear();
     }
   }
   

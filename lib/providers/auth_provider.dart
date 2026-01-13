@@ -1,5 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 
@@ -44,8 +43,6 @@ class AuthState {
 class AuthNotifier extends StateNotifier<AuthState> {
   AuthNotifier() : super(const AuthState());
   
-  static const _storage = FlutterSecureStorage();
-  
   // Initialize authentication state
   Future<void> initializeAuth() async {
     state = state.copyWith(isLoading: true);
@@ -56,7 +53,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
       final isOnboarded = prefs.getBool(AppConstants.onboardingKey) ?? false;
       
       // Check for stored token
-      final token = await _storage.read(key: AppConstants.accessTokenKey);
+      final token = prefs.getString(AppConstants.accessTokenKey);
       
       if (token != null && !JwtDecoder.isExpired(token)) {
         // Token exists and is valid, get user data
@@ -112,9 +109,10 @@ class AuthNotifier extends StateNotifier<AuthState> {
       final response = await ApiService.instance.register(request);
       
       // Store tokens
-      await _storage.write(
-        key: AppConstants.accessTokenKey,
-        value: response.accessToken,
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(
+        AppConstants.accessTokenKey,
+        response.accessToken,
       );
       
       state = state.copyWith(
@@ -149,9 +147,10 @@ class AuthNotifier extends StateNotifier<AuthState> {
       final response = await ApiService.instance.login(request);
       
       // Store tokens
-      await _storage.write(
-        key: AppConstants.accessTokenKey,
-        value: response.accessToken,
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(
+        AppConstants.accessTokenKey,
+        response.accessToken,
       );
       
       state = state.copyWith(
@@ -229,7 +228,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
   
   // Private methods
   Future<void> _clearAuthData() async {
-    await _storage.deleteAll();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
   }
   
   String _getErrorMessage(dynamic error) {
