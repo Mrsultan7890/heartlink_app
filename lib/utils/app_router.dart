@@ -52,7 +52,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     redirect: (context, state) {
       final isLoggedIn = authState.isAuthenticated;
       final isOnboarded = authState.isOnboarded;
-      final currentPath = state.fullPath;
+      final currentPath = state.fullPath ?? '/';
       
       // Splash screen logic
       if (currentPath == AppRoutes.splash) {
@@ -219,7 +219,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             ),
             const SizedBox(height: 16),
             Text(
-              'Page not found: ${state.fullPath}',
+              'Page not found: ${state.fullPath ?? 'Unknown'}',
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 16),
