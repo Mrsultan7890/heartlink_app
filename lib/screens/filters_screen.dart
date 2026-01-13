@@ -435,20 +435,19 @@ class _RelationshipIntentScreenState extends ConsumerState<RelationshipIntentScr
                 itemCount: intents.length,
                 itemBuilder: (context, index) {
                   final intent = intents[index];
-                  final isSelected = selectedIntent == intent['value'];
                   
                   return Card(
                     margin: const EdgeInsets.only(bottom: 12),
                     child: ListTile(
                       leading: Icon(
-                        intent['icon'],
-                        color: intent['color'],
+                        intent['icon'] as IconData,
+                        color: intent['color'] as Color,
                         size: 32,
                       ),
-                      title: Text(intent['title']),
-                      subtitle: Text(intent['description']),
+                      title: Text(intent['title'] as String),
+                      subtitle: Text(intent['description'] as String),
                       trailing: Radio<String>(
-                        value: intent['value'],
+                        value: intent['value'] as String,
                         groupValue: selectedIntent,
                         onChanged: (value) {
                           setState(() {
@@ -458,7 +457,7 @@ class _RelationshipIntentScreenState extends ConsumerState<RelationshipIntentScr
                       ),
                       onTap: () {
                         setState(() {
-                          selectedIntent = intent['value'];
+                          selectedIntent = intent['value'] as String?;
                         });
                       },
                     ),

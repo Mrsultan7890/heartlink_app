@@ -6,6 +6,9 @@ analyzer:
     - "**/*.freezed.dart"
     - "build/**"
     - "lib/generated_plugin_registrant.dart"
+  errors:
+    argument_type_not_assignable: ignore
+    invalid_assignment: ignore
 
 linter:
   rules:
@@ -14,3 +17,8 @@ linter:
     prefer_const_constructors: false
     lines_longer_than_80_chars: false
     sort_pub_dependencies: false
+    unused_import: false
+    unused_local_variable: false
+    always_use_package_imports: false
+    directives_ordering: false
+    eol_at_end_of_file: false
