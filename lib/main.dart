@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'services/api_service.dart';
 import 'services/auth_service.dart';
-import 'services/notification_service.dart';
+
 import 'utils/app_router.dart';
 import 'utils/app_theme.dart';
 import 'utils/constants.dart';
@@ -74,7 +74,7 @@ class HeartLinkApp extends ConsumerWidget {
       builder: (context, child) {
         return MediaQuery(
           data: MediaQuery.of(context).copyWith(
-            textScaleFactor: 1.0, // Prevent text scaling
+            textScaler: const TextScaler.linear(1.0), // Prevent text scaling
           ),
           child: child!,
         );

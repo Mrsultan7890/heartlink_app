@@ -25,7 +25,7 @@ linter:
     sort_constructors_first: false
     always_put_required_named_parameters_first: false
     avoid_redundant_argument_values: false
-    deprecated_member_use: false
+
     prefer_int_literals: false
     omit_local_variable_types: false
     avoid_equals_and_hash_code_on_mutable_classes: false
