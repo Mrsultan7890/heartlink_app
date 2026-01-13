@@ -69,7 +69,7 @@ abstract class ApiService {
           data: {'refresh_token': refreshToken},
         );
         
-        final newToken = response.data['access_token'];
+        final newToken = response.data?['access_token'];
         await _storage.write(key: AppConstants.accessTokenKey, value: newToken);
       }
     } catch (e) {
