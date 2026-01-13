@@ -1,0 +1,36 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="heartGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF6B6B;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#FF8E8E;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFB3B3;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFF5F5;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background Circle -->
+  <circle cx="256" cy="256" r="240" fill="url(#bgGradient)" stroke="#FF6B6B" stroke-width="8"/>
+  
+  <!-- Main Heart -->
+  <path d="M256 400 C200 350, 120 280, 120 200 C120 160, 150 130, 190 130 C220 130, 240 150, 256 170 C272 150, 292 130, 322 130 C362 130, 392 160, 392 200 C392 280, 312 350, 256 400 Z" 
+        fill="url(#heartGradient)" 
+        stroke="#E53E3E" 
+        stroke-width="4"/>
+  
+  <!-- Heart Highlight -->
+  <ellipse cx="210" cy="180" rx="25" ry="35" fill="#FFFFFF" opacity="0.3"/>
+  
+  <!-- Small Hearts -->
+  <path d="M180 120 C170 115, 160 110, 160 100 C160 95, 165 90, 170 90 C175 90, 180 95, 180 100 C180 95, 185 90, 190 90 C195 90, 200 95, 200 100 C200 110, 190 115, 180 120 Z" 
+        fill="#FFB3B3" opacity="0.8"/>
+  
+  <path d="M350 380 C340 375, 330 370, 330 360 C330 355, 335 350, 340 350 C345 350, 350 355, 350 360 C350 355, 355 350, 360 350 C365 350, 370 355, 370 360 C370 370, 360 375, 350 380 Z" 
+        fill="#FFB3B3" opacity="0.8"/>
+  
+  <!-- Link Symbol -->
+  <circle cx="256" cy="256" r="40" fill="none" stroke="#FFFFFF" stroke-width="6" opacity="0.9"/>
+  <circle cx="256" cy="256" r="15" fill="#FFFFFF"/>
+</svg>
