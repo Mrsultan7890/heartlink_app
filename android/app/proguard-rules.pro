@@ -1,4 +1,8 @@
-# Flutter wrapper
+# Keep Google Play Core classes
+-keep class com.google.android.play.core.** { *; }
+-dontwarn com.google.android.play.core.**
+
+# Keep Flutter classes
 -keep class io.flutter.app.** { *; }
 -keep class io.flutter.plugin.**  { *; }
 -keep class io.flutter.util.**  { *; }
@@ -6,40 +10,12 @@
 -keep class io.flutter.**  { *; }
 -keep class io.flutter.plugins.**  { *; }
 
-# Retrofit
--keepattributes Signature, InnerClasses, EnclosingMethod
--keepattributes RuntimeVisibleAnnotations, RuntimeVisibleParameterAnnotations
--keepclassmembers,allowshrinking,allowobfuscation interface * {
-    @retrofit2.http.* <methods>;
-}
--dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
--dontwarn javax.annotation.**
--dontwarn kotlin.Unit
--dontwarn retrofit2.KotlinExtensions
--dontwarn retrofit2.KotlinExtensions$*
-
-# Gson
--keepattributes Signature
--keepattributes *Annotation*
--dontwarn sun.misc.**
--keep class com.google.gson.examples.android.model.** { <fields>; }
--keep class * extends com.google.gson.TypeAdapter
--keep class * implements com.google.gson.TypeAdapterFactory
--keep class * implements com.google.gson.JsonSerializer
--keep class * implements com.google.gson.JsonDeserializer
--keepclassmembers,allowobfuscation class * {
-  @com.google.gson.annotations.SerializedName <fields>;
-}
-
-# Firebase
+# Keep Firebase classes
 -keep class com.google.firebase.** { *; }
--keep class com.google.android.gms.** { *; }
 -dontwarn com.google.firebase.**
--dontwarn com.google.android.gms.**
 
-# Model classes
--keep class com.heartlink.app.models.** { *; }
--keep class * extends com.google.gson.TypeAdapter
--keep class * implements com.google.gson.TypeAdapterFactory
--keep class * implements com.google.gson.JsonSerializer
--keep class * implements com.google.gson.JsonDeserializer
+# Keep other common classes
+-keepattributes *Annotation*
+-keepattributes Signature
+-keepattributes InnerClasses
+-keepattributes EnclosingMethod
