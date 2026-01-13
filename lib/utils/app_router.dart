@@ -52,7 +52,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     redirect: (context, state) {
       final isLoggedIn = authState.isAuthenticated;
       final isOnboarded = authState.isOnboarded;
-      final currentPath = state.location;
+      final currentPath = state.fullPath;
       
       // Splash screen logic
       if (currentPath == AppRoutes.splash) {
@@ -169,7 +169,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         name: 'chat',
         builder: (context, state) {
           final matchId = state.pathParameters['matchId']!;
-          final matchName = state.queryParameters['name'] ?? 'Chat';
+          final matchName = state.uri.queryParameters['name'] ?? 'Chat';
           return ChatScreen(
             matchId: int.parse(matchId),
             matchName: matchName,
@@ -219,7 +219,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             ),
             const SizedBox(height: 16),
             Text(
-              'Page not found: ${state.location}',
+              'Page not found: ${state.fullPath}',
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 16),

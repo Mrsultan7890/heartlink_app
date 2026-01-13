@@ -3,7 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'message_model.g.dart';
 
-@HiveType(typeId: 4)
+@HiveType(typeId: 3)
 @JsonSerializable()
 class MessageModel extends HiveObject {
   @HiveField(0)

@@ -44,12 +44,12 @@ class DiscoverNotifier extends StateNotifier<DiscoverState> {
     );
 
     try {
-      final users = await ApiService.instance.discoverUsers(limit: 20);
+      final response = await ApiService.instance.discoverUsers(limit: 20);
       
       state = state.copyWith(
-        users: refresh ? users : [...state.users, ...users],
+        users: refresh ? response.users : [...state.users, ...response.users],
         isLoading: false,
-        hasMore: users.length >= 20,
+        hasMore: response.users.length >= 20,
       );
     } catch (e) {
       state = state.copyWith(
