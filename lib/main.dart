@@ -13,14 +13,20 @@ import 'utils/app_router.dart';
 import 'utils/app_theme.dart';
 import 'utils/constants.dart';
 
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'services/api_service.dart';
+import 'services/auth_service.dart';
+import 'utils/app_router.dart';
+import 'utils/app_theme.dart';
+import 'utils/constants.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
-  // Initialize Firebase
-  await Firebase.initializeApp();
-  
-  // Initialize Crashlytics
-  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
   
   // Initialize Hive
   await Hive.initFlutter();
@@ -31,23 +37,12 @@ void main() async {
   // Initialize Services
   await ApiService.initialize();
   await AuthService.initialize();
-  await NotificationService.initialize();
   
   // Set preferred orientations
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-  
-  // Set system UI overlay style
-  SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.dark,
-      systemNavigationBarColor: Colors.white,
-      systemNavigationBarIconBrightness: Brightness.dark,
-    ),
-  );
   
   runApp(
     ProviderScope(
