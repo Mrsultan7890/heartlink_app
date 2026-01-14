@@ -400,10 +400,10 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   Future<void> _getCurrentLocation() async {
     try {
       // Check permissions
-      LocationPermission permission = await Geolocator.checkPermission();
+      final permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied) {
-        permission = await Geolocator.requestPermission();
-        if (permission == LocationPermission.denied) {
+        final newPermission = await Geolocator.requestPermission();
+        if (newPermission == LocationPermission.denied) {
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
@@ -449,13 +449,13 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
       }
 
       // Get current position
-      Position position = await Geolocator.getCurrentPosition(
+      final position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
         timeLimit: const Duration(seconds: 10),
       );
 
       // Get address from coordinates
-      List<Placemark> placemarks = await placemarkFromCoordinates(
+      final placemarks = await placemarkFromCoordinates(
         position.latitude,
         position.longitude,
       );
@@ -464,14 +464,14 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         final place = placemarks[0];
         final address = StringBuffer();
         
-        if (place.locality != null && place.locality.isNotEmpty) {
+        if (place.locality?.isNotEmpty ?? false) {
           address.write(place.locality);
         }
-        if (place.administrativeArea != null && place.administrativeArea.isNotEmpty) {
+        if (place.administrativeArea?.isNotEmpty ?? false) {
           if (address.length > 0) address.write(', ');
           address.write(place.administrativeArea);
         }
-        if (place.country != null && place.country.isNotEmpty) {
+        if (place.country?.isNotEmpty ?? false) {
           if (address.length > 0) address.write(', ');
           address.write(place.country);
         }
