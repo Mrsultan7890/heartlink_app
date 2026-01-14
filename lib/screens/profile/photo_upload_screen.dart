@@ -319,7 +319,7 @@ class _PhotoUploadScreenState extends ConsumerState<PhotoUploadScreen> {
       ),
     );
 
-    if (confirm == true) {
+    if (confirm ?? false) {
       try {
         await ApiService.instance.deleteImage(index);
         await ref.read(userProvider.notifier).loadProfile();

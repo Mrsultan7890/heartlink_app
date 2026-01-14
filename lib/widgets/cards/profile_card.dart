@@ -130,7 +130,7 @@ class ProfileCard extends StatelessWidget {
                       if (user.bio != null) ...[
                         const SizedBox(height: 12),
                         Text(
-                          user.bio ?? '',
+                          user.bio!,
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 14,
@@ -139,12 +139,12 @@ class ProfileCard extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                         ),
                       ],
-                      if (user.interests != null && user.interests!.isNotEmpty) ...[
+                      if (user.interests?.isNotEmpty ?? false) ...[
                         const SizedBox(height: 12),
                         Wrap(
                           spacing: 8,
                           runSpacing: 8,
-                          children: (user.interests ?? []).take(3).map((interest) {
+                          children: user.interests!.take(3).map((interest) {
                             return Container(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 12,

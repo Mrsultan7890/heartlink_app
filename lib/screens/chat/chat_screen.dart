@@ -40,15 +40,18 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     setState(() => _isLoading = true);
     try {
       final messages = await ApiService.instance.getMessages(widget.matchId);
-      setState(() {
-        _messages.clear();
-        _messages.addAll(messages);
-        _isLoading = false;
-      });
-      _scrollToBottom();
-    } catch (e) {
-      setState(() => _isLoading = false);
       if (mounted) {
+        setState(() {
+          _messages
+            ..clear()
+            ..addAll(messages);
+          _isLoading = false;
+        });
+        _scrollToBottom();
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() => _isLoading = false);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Failed to load messages: $e')),
         );
