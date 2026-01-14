@@ -115,9 +115,13 @@ class _MatchesScreenState extends ConsumerState<MatchesScreen> {
   }
 
   Widget _buildMatchCard(dynamic match, int index) {
-    // Get other user info
-    final otherUser = match.user2Profile ?? match.user1Profile;
-    final matchId = match.id;
+    final dynamic otherUser = match.user2Profile ?? match.user1Profile;
+    final dynamic matchId = match.id;
+    final bool hasImages = otherUser.profileImages?.isNotEmpty ?? false;
+    final bool isVerified = otherUser.isVerified ?? false;
+    final bool isPremium = otherUser.isPremium ?? false;
+    final String? location = otherUser.location as String?;
+    final String? lastMessage = match.lastMessage as String?;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
@@ -151,21 +155,23 @@ class _MatchesScreenState extends ConsumerState<MatchesScreen> {
                       height: 70,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        image: (otherUser.profileImages.isNotEmpty
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: hasImages
                             ? DecorationImage(
                                 image: CachedNetworkImageProvider(
-                                  otherUser.profileImages.first,
+                                  otherUser.profileImages.first as String,
                                 ),
                                 fit: BoxFit.cover,
                               )
-                            : null) as Decoration?,
+                            : null,
                         color: Colors.grey[300],
                       ),
-                      child: otherUser.profileImages.isEmpty
+                      child: !hasImages
                           ? const Icon(Icons.person, size: 35, color: Colors.white)
                           : null,
                     ),
-                    if (otherUser.isVerified)
+                    if (isVerified)
                       Positioned(
                         bottom: 0,
                         right: 0,
@@ -203,7 +209,7 @@ class _MatchesScreenState extends ConsumerState<MatchesScreen> {
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
-                          if (otherUser.isPremium)
+                          if (isPremium)
                             Container(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 8,
@@ -224,7 +230,7 @@ class _MatchesScreenState extends ConsumerState<MatchesScreen> {
                         ],
                       ),
                       const SizedBox(height: 4),
-                      if (otherUser.location != null)
+                      if (location != null)
                         Row(
                           children: [
                             Icon(
@@ -235,7 +241,7 @@ class _MatchesScreenState extends ConsumerState<MatchesScreen> {
                             const SizedBox(width: 4),
                             Expanded(
                               child: Text(
-                                otherUser.location!,
+                                location!,
                                 style: TextStyle(
                                   color: AppTheme.textSecondary,
                                   fontSize: 14,
@@ -246,9 +252,9 @@ class _MatchesScreenState extends ConsumerState<MatchesScreen> {
                           ],
                         ),
                       const SizedBox(height: 4),
-                      if (match.lastMessage != null)
+                      if (lastMessage != null)
                         Text(
-                          match.lastMessage!,
+                          lastMessage!,
                           style: TextStyle(
                             color: AppTheme.textSecondary,
                             fontSize: 14,

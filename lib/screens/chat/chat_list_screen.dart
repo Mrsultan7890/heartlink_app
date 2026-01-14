@@ -83,46 +83,27 @@ class _ChatListScreenState extends ConsumerState<ChatListScreen> {
   }
 
   Widget _buildChatTile(dynamic match) {
-    final otherUser = match.user2Profile ?? match.user1Profile;
-    const hasUnread = false;
+    final dynamic otherUser = match.user2Profile ?? match.user1Profile;
+    final bool hasUnread = false;
+    final bool hasImages = otherUser.profileImages?.isNotEmpty ?? false;
 
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      leading: Stack(
-        children: [
-          CircleAvatar(
-            radius: 30,
-            backgroundImage: (otherUser.profileImages.isNotEmpty
-                ? CachedNetworkImageProvider(otherUser.profileImages.first)
-                : null) as ImageProvider?,
-            child: otherUser.profileImages.isEmpty
-                ? const Icon(Icons.person)
-                : null,
-          ),
-          if (hasUnread)
-            Positioned(
-              right: 0,
-              top: 0,
-              child: Container(
-                width: 12,
-                height: 12,
-                decoration: BoxDecoration(
-                  color: AppTheme.primaryColor,
-                  shape: BoxShape.circle,
-                  border: Border.all(color: Colors.white, width: 2),
-                ),
-              ),
-            ),
-        ],
+      leading: CircleAvatar(
+        radius: 30,
+        backgroundImage: hasImages
+            ? CachedNetworkImageProvider(otherUser.profileImages.first) as ImageProvider
+            : null,
+        child: !hasImages ? const Icon(Icons.person) : null,
       ),
       title: Text(
-        otherUser.name,
+        otherUser.name as String,
         style: TextStyle(
           fontWeight: hasUnread ? FontWeight.bold : FontWeight.normal,
         ),
       ),
       subtitle: Text(
-        match.lastMessage ?? 'Start a conversation',
+        (match.lastMessage as String?) ?? 'Start a conversation',
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(
