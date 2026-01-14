@@ -139,12 +139,12 @@ class ProfileCard extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                         ),
                       ],
-                      if (user.interests?.isNotEmpty ?? false) ...[
+                      if (user.interests.isNotEmpty) ...[
                         const SizedBox(height: 12),
                         Wrap(
                           spacing: 8,
                           runSpacing: 8,
-                          children: user.interests!.take(3).map((interest) {
+                          children: user.interests.take(3).map((interest) {
                             return Container(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 12,

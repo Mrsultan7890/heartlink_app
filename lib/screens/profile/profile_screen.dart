@@ -155,8 +155,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           Icons.info_outline,
                         ),
 
-                        if (user.interests?.isNotEmpty ?? false)
-                          _buildInterestsCard(context, user.interests!),
+                        if (user.interests.isNotEmpty)
+                          _buildInterestsCard(context, user.interests),
 
                         if (user.relationshipIntent != null)
                           _buildInfoCard(
