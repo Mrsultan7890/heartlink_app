@@ -468,11 +468,15 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
           address.write(place.locality);
         }
         if (place.administrativeArea?.isNotEmpty ?? false) {
-          if (address.length > 0) address.write(', ');
+          if (address.length > 0) {
+            address.write(', ');
+          }
           address.write(place.administrativeArea);
         }
         if (place.country?.isNotEmpty ?? false) {
-          if (address.length > 0) address.write(', ');
+          if (address.length > 0) {
+            address.write(', ');
+          }
           address.write(place.country);
         }
 
