@@ -5,9 +5,9 @@ class AppConstants {
   static const String appDescription = 'Find Your Perfect Match';
   
   // API Configuration
-  static const String baseUrl = 'http://localhost:8000';
+  static const String baseUrl = String.fromEnvironment('API_URL', defaultValue: 'http://localhost:8000');
   static const String apiVersion = '/api';
-  static const String wsUrl = 'ws://localhost:8000/api/chat/ws';
+  static const String wsUrl = String.fromEnvironment('WS_URL', defaultValue: 'ws://localhost:8000/api/chat/ws');
   
   // Storage Keys
   static const String accessTokenKey = 'access_token';

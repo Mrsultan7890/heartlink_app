@@ -51,7 +51,7 @@ jobs:
       run: flutter test
       
     - name: Build APK
-      run: flutter build apk --debug
+      run: flutter build apk --debug --dart-define=API_URL=https://heartlink-api.onrender.com --dart-define=WS_URL=wss://heartlink-api.onrender.com/api/chat/ws
       
     - name: Upload APK
       uses: actions/upload-artifact@v4

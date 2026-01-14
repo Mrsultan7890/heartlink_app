@@ -2,15 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
-  // Brand Colors
-  static const Color primaryColor = Color(0xFFFF6B6B);
-  static const Color secondaryColor = Color(0xFF4ECDC4);
-  static const Color accentColor = Color(0xFFFFE66D);
-  static const Color backgroundColor = Color(0xFFF8F9FA);
+  // Brand Colors - Dating App Theme
+  static const Color primaryColor = Color(0xFFFF6B6B); // Romantic Red/Pink
+  static const Color secondaryColor = Color(0xFFFF8E8E); // Light Pink
+  static const Color accentColor = Color(0xFFFFB3B3); // Soft Pink
+  static const Color backgroundColor = Color(0xFFFFF5F5); // Very Light Pink
   static const Color surfaceColor = Color(0xFFFFFFFF);
   static const Color errorColor = Color(0xFFE74C3C);
   static const Color successColor = Color(0xFF2ECC71);
   static const Color warningColor = Color(0xFFF39C12);
+  static const Color likeColor = Color(0xFF4CAF50); // Green for like
+  static const Color dislikeColor = Color(0xFFFF5252); // Red for dislike
+  static const Color superLikeColor = Color(0xFF2196F3); // Blue for super like
   
   // Text Colors
   static const Color textPrimary = Color(0xFF2C3E50);
