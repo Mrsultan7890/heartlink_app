@@ -20,13 +20,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() => ref.read(userProvider.notifier).loadProfile());
+    // Refresh auth state to get latest user data
+    Future.microtask(() => ref.read(authProvider.notifier).initializeAuth());
   }
 
   @override
   Widget build(BuildContext context) {
-    final userState = ref.watch(userProvider);
-    final user = userState.user;
+    final authState = ref.watch(authProvider);
+    final user = authState.user;
 
     return Scaffold(
       appBar: AppBar(
@@ -38,12 +39,16 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           ),
         ],
       ),
-      body: userState.isLoading
+      body: authState.isLoading
           ? const Center(child: CircularProgressIndicator())
           : user == null
               ? const Center(child: Text('No profile data'))
               : RefreshIndicator(
-                  onRefresh: () => ref.read(userProvider.notifier).loadProfile(),
+                  onRefresh: () async {
+                    await ref.read(userProvider.notifier).loadProfile();
+                    // Reload auth state to sync
+                    await ref.read(authProvider.notifier).initializeAuth();
+                  },
                   child: SingleChildScrollView(
                     physics: const AlwaysScrollableScrollPhysics(),
                     child: Column(
