@@ -185,7 +185,6 @@ class RegisterRequest {
 
 @JsonSerializable()
 class LoginRequest {
-  @JsonKey(name: 'username')
   final String email;
   final String password;
   
