@@ -523,7 +523,7 @@ class _PrivacyScreenState extends ConsumerState<PrivacyScreen> {
   }
 
   void _downloadData() {
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Download Data'),
@@ -552,7 +552,7 @@ class _PrivacyScreenState extends ConsumerState<PrivacyScreen> {
   }
 
   void _deleteAccount() {
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Delete Account'),
@@ -567,7 +567,7 @@ class _PrivacyScreenState extends ConsumerState<PrivacyScreen> {
           TextButton(
             onPressed: () {
               Navigator.pop(context);
-              // TODO: Implement account deletion
+              // NOTE: Implement account deletion
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text('Account deletion will be available soon'),

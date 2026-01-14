@@ -6,7 +6,6 @@ import 'package:geocoding/geocoding.dart';
 
 import '../../providers/user_provider.dart';
 import '../../utils/app_theme.dart';
-import '../../widgets/common/custom_button.dart';
 import '../../widgets/forms/custom_text_field.dart';
 
 class EditProfileScreen extends ConsumerStatefulWidget {
@@ -360,7 +359,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
               const SizedBox(height: 16),
               
               // Cancel Button
-              Container(
+              SizedBox(
                 width: double.infinity,
                 height: 50,
                 child: OutlinedButton(
@@ -462,7 +461,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
       );
 
       if (placemarks.isNotEmpty) {
-        Placemark place = placemarks[0];
+        final place = placemarks[0];
         String address = '';
         
         if (place.locality != null && place.locality!.isNotEmpty) {

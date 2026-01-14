@@ -455,7 +455,7 @@ class SettingsScreen extends ConsumerWidget {
   }
 
   void _showLocationSettings(BuildContext context) {
-    showModalBottomSheet(
+    showModalBottomSheet<void>(
       context: context,
       builder: (context) => Container(
         padding: const EdgeInsets.all(24),
@@ -483,7 +483,7 @@ class SettingsScreen extends ConsumerWidget {
   }
 
   void _showBlockedUsers(BuildContext context) {
-    showModalBottomSheet(
+    showModalBottomSheet<void>(
       context: context,
       builder: (context) => Container(
         padding: const EdgeInsets.all(24),
@@ -511,7 +511,7 @@ class SettingsScreen extends ConsumerWidget {
   }
 
   void _showSafetyCenter(BuildContext context) {
-    showModalBottomSheet(
+    showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
       builder: (context) => Container(
@@ -570,7 +570,7 @@ class SettingsScreen extends ConsumerWidget {
   }
 
   void _showEmailSettings(BuildContext context) {
-    showModalBottomSheet(
+    showModalBottomSheet<void>(
       context: context,
       builder: (context) => Container(
         padding: const EdgeInsets.all(24),

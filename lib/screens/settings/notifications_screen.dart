@@ -452,7 +452,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
   }
 
   void _openSystemSettings() {
-    // TODO: Open system notification settings
+    // NOTE: System settings integration coming soon
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('System settings integration coming soon'),

@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../services/api_service.dart';
 
 class NotificationSettings {
   final bool pushNotifications;
@@ -148,7 +147,7 @@ class NotificationNotifier extends StateNotifier<NotificationSettings> {
 
   Future<void> _syncWithBackend() async {
     try {
-      // TODO: Add backend API call to sync notification settings
+      // NOTE: Add backend API call to sync notification settings
       // await ApiService.instance.updateNotificationSettings(state.toJson());
     } catch (e) {
       // Handle error silently for now

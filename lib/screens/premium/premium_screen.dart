@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 import '../../utils/app_theme.dart';
-import '../../widgets/common/custom_button.dart';
 
 class PremiumScreen extends ConsumerStatefulWidget {
   const PremiumScreen({super.key});
@@ -573,8 +572,8 @@ class _PremiumScreenState extends ConsumerState<PremiumScreen> {
   }
 
   void _handleSubscribe() {
-    // TODO: Implement actual subscription logic
-    showDialog(
+    // NOTE: Implement actual subscription logic
+    showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Subscription'),

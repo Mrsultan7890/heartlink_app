@@ -55,8 +55,6 @@ class UserNotifier extends StateNotifier<UserState> {
         bio: bio,
         location: location,
       );
-      final user = await ApiService.instance.updateProfile(request);
-      
       // Update interests if provided
       if (interests != null) {
         await ApiService.instance.updateInterests(

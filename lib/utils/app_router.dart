@@ -40,6 +40,8 @@ class AppRoutes {
   static const String privacy = '/privacy';
   static const String notifications = '/notifications';
   static const String premium = '/premium';
+  static const String terms = '/terms';
+  static const String privacyPolicy = '/privacy-policy';
 }
 
 final appRouterProvider = Provider<GoRouter>((ref) {
