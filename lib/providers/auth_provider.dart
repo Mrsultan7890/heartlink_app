@@ -5,6 +5,7 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 
 import '../models/user_model.dart';
 import '../services/api_service.dart';
+import '../services/location_service.dart';
 import '../utils/constants.dart';
 
 // Auth State
@@ -48,53 +49,63 @@ class AuthNotifier extends StateNotifier<AuthState> {
   
   // Initialize authentication state
   Future<void> initializeAuth() async {
+    print('🔐 Initializing auth...');
     state = state.copyWith(isLoading: true);
     
     try {
       // Check onboarding status
       final prefs = await SharedPreferences.getInstance();
       final isOnboarded = prefs.getBool(AppConstants.onboardingKey) ?? false;
+      print('📱 Onboarded: $isOnboarded');
       
       // Check for stored token
       final token = await _storage.read(key: AppConstants.accessTokenKey);
+      print('🔑 Token found: ${token != null}');
       
-      if (token != null && !JwtDecoder.isExpired(token)) {
-        // Token exists and is valid
-        try {
-          // Try to get user data from backend
-          final user = await ApiService.instance.getCurrentUser();
-          
-          state = state.copyWith(
-            isAuthenticated: true,
-            isOnboarded: isOnboarded,
-            user: user,
-            isLoading: false,
-          );
-        } catch (e) {
-          // Network error or backend issue - keep user logged in with token
-          state = state.copyWith(
-            isAuthenticated: true,
-            isOnboarded: isOnboarded,
-            isLoading: false,
-          );
+      if (token != null) {
+        print('🔑 Token: ${token.substring(0, 20)}...');
+        final isExpired = JwtDecoder.isExpired(token);
+        print('⏰ Token expired: $isExpired');
+        
+        if (!isExpired) {
+          print('✅ Token valid, fetching user...');
+          try {
+            final user = await ApiService.instance.getCurrentUser();
+            print('✅ User loaded: ${user.email}');
+            
+            state = state.copyWith(
+              isAuthenticated: true,
+              isOnboarded: isOnboarded,
+              user: user,
+              isLoading: false,
+            );
+            return;
+          } catch (e) {
+            print('⚠️ Failed to fetch user: $e');
+            state = state.copyWith(
+              isAuthenticated: true,
+              isOnboarded: isOnboarded,
+              isLoading: false,
+            );
+            return;
+          }
         }
-      } else {
-        // No valid token
-        await _clearAuthData();
-        state = state.copyWith(
-          isAuthenticated: false,
-          isOnboarded: isOnboarded,
-          isLoading: false,
-        );
       }
+      
+      print('❌ No valid token, logging out');
+      await _clearAuthData();
+      state = state.copyWith(
+        isAuthenticated: false,
+        isOnboarded: isOnboarded,
+        isLoading: false,
+      );
     } catch (e) {
-      // Check if we have a valid token despite error
+      print('❌ Init error: $e');
       final token = await _storage.read(key: AppConstants.accessTokenKey);
       final prefs = await SharedPreferences.getInstance();
       final isOnboarded = prefs.getBool(AppConstants.onboardingKey) ?? false;
       
       if (token != null && !JwtDecoder.isExpired(token)) {
-        // Keep user logged in
         state = state.copyWith(
           isAuthenticated: true,
           isOnboarded: isOnboarded,
@@ -178,11 +189,16 @@ class AuthNotifier extends StateNotifier<AuthState> {
         value: response.accessToken,
       );
       
+      print('✅ Login successful, token stored');
+      
       state = state.copyWith(
         isAuthenticated: true,
         user: response.user,
         isLoading: false,
       );
+      
+      // Auto-detect and update location in background
+      _updateLocationInBackground();
       
       return true;
     } catch (e) {
@@ -248,6 +264,32 @@ class AuthNotifier extends StateNotifier<AuthState> {
   // Clear error
   void clearError() {
     state = state.copyWith(error: null);
+  }
+  
+  // Auto-update location in background
+  Future<void> _updateLocationInBackground() async {
+    try {
+      print('📍 Auto-detecting location...');
+      
+      final locationData = await LocationService.getCurrentLocationWithAddress();
+      
+      if (locationData != null) {
+        print('📍 Location detected: ${locationData['address']}');
+        
+        // Update backend
+        await ApiService.instance.updateLocation(
+          locationData['latitude'],
+          locationData['longitude'],
+          locationData['address'],
+        );
+        
+        print('✅ Location updated on server');
+      } else {
+        print('⚠️ Location permission denied or unavailable');
+      }
+    } catch (e) {
+      print('❌ Location update failed: $e');
+    }
   }
   
   // Private methods
