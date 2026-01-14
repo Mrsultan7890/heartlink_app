@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../services/api_service.dart';
-import '../../utils/app_theme.dart';
 
 class BlockedUsersScreen extends ConsumerStatefulWidget {
   const BlockedUsersScreen({super.key});
@@ -78,10 +77,12 @@ class _BlockedUsersScreenState extends ConsumerState<BlockedUsersScreen> {
                     final user = blockedUsers[index];
                     return ListTile(
                       leading: CircleAvatar(
-                        backgroundImage: user['profile_images']?.isNotEmpty == true
-                            ? NetworkImage(user['profile_images'][0])
+                        backgroundImage: (user['profile_images'] != null && 
+                                         (user['profile_images'] as List).isNotEmpty)
+                            ? NetworkImage(user['profile_images'][0] as String)
                             : null,
-                        child: user['profile_images']?.isEmpty ?? true
+                        child: (user['profile_images'] == null || 
+                               (user['profile_images'] as List).isEmpty)
                             ? const Icon(Icons.person)
                             : null,
                       ),

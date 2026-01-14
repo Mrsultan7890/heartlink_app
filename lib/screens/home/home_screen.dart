@@ -37,6 +37,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final location = GoRouterState.of(context).uri.path;
+    if (location.contains('discover')) {
+      _currentIndex = 0;
+    } else if (location.contains('matches')) {
+      _currentIndex = 1;
+    } else if (location.contains('chat')) {
+      _currentIndex = 2;
+    } else if (location.contains('profile')) {
+      _currentIndex = 3;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: widget.child,

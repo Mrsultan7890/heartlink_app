@@ -482,34 +482,6 @@ class SettingsScreen extends ConsumerWidget {
     );
   }
 
-  void _showBlockedUsers(BuildContext context) {
-    showModalBottomSheet<void>(
-      context: context,
-      builder: (context) => Container(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text(
-              'Blocked Users',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 24),
-            const Text('No blocked users yet.'),
-            const SizedBox(height: 24),
-            CustomButton(
-              text: 'Close',
-              onPressed: () => Navigator.pop(context),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   void _showSafetyCenter(BuildContext context) {
     showModalBottomSheet<void>(
       context: context,
