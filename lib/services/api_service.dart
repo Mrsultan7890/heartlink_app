@@ -136,6 +136,12 @@ abstract class ApiService {
   @GET('/users/interests')
   Future<AvailableInterestsResponse> getAvailableInterests();
   
+  @GET('/users/preferences')
+  Future<PreferencesResponse> getPreferences();
+  
+  @PUT('/users/preferences')
+  Future<PreferencesResponse> updatePreferences(@Body() Map<String, dynamic> preferences);
+  
   // Match Endpoints
   @POST('/matches/swipe')
   Future<SwipeResponse> swipeUser(@Body() SwipeRequest request);
@@ -484,6 +490,21 @@ class AvailableInterestsResponse {
   factory AvailableInterestsResponse.fromJson(Map<String, dynamic> json) =>
       _$AvailableInterestsResponseFromJson(json);
   Map<String, dynamic> toJson() => _$AvailableInterestsResponseToJson(this);
+}
+
+@JsonSerializable()
+class PreferencesResponse {
+  final String message;
+  final Map<String, dynamic> preferences;
+  
+  PreferencesResponse({
+    this.message = '',
+    required this.preferences,
+  });
+  
+  factory PreferencesResponse.fromJson(Map<String, dynamic> json) =>
+      _$PreferencesResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$PreferencesResponseToJson(this);
 }
 
 // Static helper methods

@@ -59,15 +59,25 @@ class AuthNotifier extends StateNotifier<AuthState> {
       final token = await _storage.read(key: AppConstants.accessTokenKey);
       
       if (token != null && !JwtDecoder.isExpired(token)) {
-        // Token exists and is valid, get user data
-        final user = await ApiService.instance.getCurrentUser();
-        
-        state = state.copyWith(
-          isAuthenticated: true,
-          isOnboarded: isOnboarded,
-          user: user,
-          isLoading: false,
-        );
+        // Token exists and is valid
+        try {
+          // Try to get user data from backend
+          final user = await ApiService.instance.getCurrentUser();
+          
+          state = state.copyWith(
+            isAuthenticated: true,
+            isOnboarded: isOnboarded,
+            user: user,
+            isLoading: false,
+          );
+        } catch (e) {
+          // Network error or backend issue - keep user logged in with token
+          state = state.copyWith(
+            isAuthenticated: true,
+            isOnboarded: isOnboarded,
+            isLoading: false,
+          );
+        }
       } else {
         // No valid token
         await _clearAuthData();
@@ -78,13 +88,27 @@ class AuthNotifier extends StateNotifier<AuthState> {
         );
       }
     } catch (e) {
-      await _clearAuthData();
-      state = state.copyWith(
-        isAuthenticated: false,
-        isOnboarded: false,
-        isLoading: false,
-        error: 'Failed to initialize authentication',
-      );
+      // Check if we have a valid token despite error
+      final token = await _storage.read(key: AppConstants.accessTokenKey);
+      final prefs = await SharedPreferences.getInstance();
+      final isOnboarded = prefs.getBool(AppConstants.onboardingKey) ?? false;
+      
+      if (token != null && !JwtDecoder.isExpired(token)) {
+        // Keep user logged in
+        state = state.copyWith(
+          isAuthenticated: true,
+          isOnboarded: isOnboarded,
+          isLoading: false,
+        );
+      } else {
+        await _clearAuthData();
+        state = state.copyWith(
+          isAuthenticated: false,
+          isOnboarded: isOnboarded,
+          isLoading: false,
+          error: 'Failed to initialize authentication',
+        );
+      }
     }
   }
   
@@ -194,7 +218,6 @@ class AuthNotifier extends StateNotifier<AuthState> {
         age: updatedUser.age,
         bio: updatedUser.bio,
         location: updatedUser.location,
-        preferences: updatedUser.preferences,
       );
       
       final user = await ApiService.instance.updateProfile(request);
