@@ -233,17 +233,49 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
   
   String _getErrorMessage(dynamic error) {
-    if (error.toString().contains('401')) {
+    final errorStr = error.toString().toLowerCase();
+    
+    // Authentication errors
+    if (errorStr.contains('401') || errorStr.contains('unauthorized')) {
       return 'Invalid email or password';
-    } else if (error.toString().contains('400')) {
-      return 'Invalid request. Please check your input.';
-    } else if (error.toString().contains('500')) {
-      return 'Server error. Please try again later.';
-    } else if (error.toString().contains('network')) {
-      return 'Network error. Please check your connection.';
-    } else {
-      return 'An unexpected error occurred';
     }
+    if (errorStr.contains('incorrect email or password')) {
+      return 'Incorrect email or password';
+    }
+    
+    // Registration errors
+    if (errorStr.contains('400') || errorStr.contains('bad request')) {
+      if (errorStr.contains('email already registered')) {
+        return 'Email already registered. Please login instead.';
+      }
+      return 'Invalid information. Please check your details.';
+    }
+    
+    // Server errors
+    if (errorStr.contains('500') || errorStr.contains('internal server')) {
+      return 'Server error. Please try again later.';
+    }
+    
+    // Network errors
+    if (errorStr.contains('network') || errorStr.contains('connection')) {
+      return 'Network error. Please check your internet connection.';
+    }
+    if (errorStr.contains('timeout')) {
+      return 'Request timeout. Please try again.';
+    }
+    if (errorStr.contains('failed host lookup')) {
+      return 'Cannot connect to server. Please check your connection.';
+    }
+    
+    // Validation errors
+    if (errorStr.contains('email')) {
+      return 'Invalid email format';
+    }
+    if (errorStr.contains('password')) {
+      return 'Password must be at least 6 characters';
+    }
+    
+    return 'An unexpected error occurred. Please try again.';
   }
 }
 
