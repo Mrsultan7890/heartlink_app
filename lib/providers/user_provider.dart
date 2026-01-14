@@ -60,18 +60,44 @@ class UserNotifier extends StateNotifier<UserState> {
       // Update interests if provided
       if (interests != null) {
         await ApiService.instance.updateInterests(
-          InterestsUpdateRequest(interests: interests),
+          {'interests': interests},
         );
       }
       
       // Update relationship intent if provided
       if (relationshipIntent != null) {
         await ApiService.instance.updateRelationshipIntent(
-          RelationshipIntentRequest(intent: relationshipIntent),
+          relationshipIntent,
         );
       }
       
-      state = state.copyWith(user: user, isLoading: false);
+      // Reload profile to get updated data
+      await loadProfile();
+    } catch (e) {
+      state = state.copyWith(error: e.toString(), isLoading: false);
+      rethrow;
+    }
+  }
+
+  Future<void> updateLocation(double latitude, double longitude, {String? locationName}) async {
+    try {
+      await ApiService.instance.updateLocation(
+        latitude,
+        longitude,
+        locationName,
+      );
+      await loadProfile();
+    } catch (e) {
+      state = state.copyWith(error: e.toString());
+      rethrow;
+    }
+  }
+
+  Future<void> updateInterests(List<String> interests) async {
+    state = state.copyWith(isLoading: true);
+    try {
+      await ApiService.instance.updateInterests({'interests': interests});
+      await loadProfile();
     } catch (e) {
       state = state.copyWith(error: e.toString(), isLoading: false);
       rethrow;

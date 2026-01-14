@@ -121,13 +121,17 @@ abstract class ApiService {
   });
   
   @PUT('/users/location')
-  Future<LocationUpdateResponse> updateLocation(@Body() LocationUpdateRequest request);
+  Future<LocationUpdateResponse> updateLocation(
+    @Query('latitude') double latitude,
+    @Query('longitude') double longitude,
+    @Query('location_name') String? locationName,
+  );
   
   @PUT('/users/interests')
-  Future<InterestsUpdateResponse> updateInterests(@Body() InterestsUpdateRequest request);
+  Future<Map<String, dynamic>> updateInterests(@Body() Map<String, dynamic> request);
   
   @PUT('/users/relationship-intent')
-  Future<RelationshipIntentResponse> updateRelationshipIntent(@Body() RelationshipIntentRequest request);
+  Future<Map<String, dynamic>> updateRelationshipIntent(@Query('intent') String intent);
   
   @GET('/users/interests')
   Future<AvailableInterestsResponse> getAvailableInterests();

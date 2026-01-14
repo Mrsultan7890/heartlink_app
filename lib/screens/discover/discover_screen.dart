@@ -67,6 +67,9 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
         child: SafeArea(
           child: Column(
             children: [
+              // Status Bar
+              _buildStatusBar(),
+              
               // Cards Section
               Expanded(
                 child: _buildCardsSection(discoverState),
@@ -81,6 +84,51 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
         ),
       ),
     );
+  }
+
+  Widget _buildStatusBar() {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.9),
+        borderRadius: BorderRadius.circular(25),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 8,
+            height: 8,
+            decoration: const BoxDecoration(
+              color: Colors.green,
+              shape: BoxShape.circle,
+            ),
+          ),
+          const SizedBox(width: 8),
+          Text(
+            'Looking for matches nearby',
+            style: TextStyle(
+              color: AppTheme.textSecondary,
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          const Spacer(),
+          Icon(
+            Icons.favorite,
+            color: AppTheme.primaryColor,
+            size: 16,
+          ),
+        ],
+      ),
+    ).animate().fadeIn().slideX(begin: -0.3, end: 0);
   }
 
   Widget _buildCardsSection(DiscoverState state) {
@@ -121,31 +169,74 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.search_off,
-            size: 80,
-            color: AppTheme.textSecondary,
+          Container(
+            width: 120,
+            height: 120,
+            decoration: BoxDecoration(
+              gradient: AppTheme.primaryGradient,
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: AppTheme.primaryColor.withOpacity(0.3),
+                  blurRadius: 20,
+                  offset: const Offset(0, 10),
+                ),
+              ],
+            ),
+            child: const Icon(
+              Icons.favorite_border,
+              size: 60,
+              color: Colors.white,
+            ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 24),
           Text(
             'No more profiles',
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-              color: AppTheme.textSecondary,
+              color: AppTheme.textPrimary,
+              fontWeight: FontWeight.bold,
             ),
           ),
           const SizedBox(height: 8),
           Text(
-            'Check back later for new matches',
+            'You\'ve seen everyone in your area!\nCheck back later for new matches',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: AppTheme.textSecondary,
             ),
+            textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 24),
-          CustomButton(
-            text: 'Refresh',
-            onPressed: () => ref.read(discoverProvider.notifier).loadUsers(),
-            icon: Icons.refresh,
-            width: 200,
+          const SizedBox(height: 32),
+          Container(
+            decoration: BoxDecoration(
+              gradient: AppTheme.primaryGradient,
+              borderRadius: BorderRadius.circular(25),
+              boxShadow: [
+                BoxShadow(
+                  color: AppTheme.primaryColor.withOpacity(0.3),
+                  blurRadius: 12,
+                  offset: const Offset(0, 6),
+                ),
+              ],
+            ),
+            child: ElevatedButton.icon(
+              onPressed: () => ref.read(discoverProvider.notifier).loadUsers(),
+              icon: const Icon(Icons.refresh, color: Colors.white),
+              label: const Text(
+                'Refresh',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.transparent,
+                shadowColor: Colors.transparent,
+                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25),
+                ),
+              ),
+            ),
           ),
         ],
       ),
@@ -198,9 +289,14 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
         shape: BoxShape.circle,
         boxShadow: [
           BoxShadow(
-            color: color.withOpacity(0.3),
+            color: color.withOpacity(0.2),
+            blurRadius: 15,
+            offset: const Offset(0, 8),
+          ),
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
             blurRadius: 10,
-            offset: const Offset(0, 5),
+            offset: const Offset(0, 2),
           ),
         ],
       ),
@@ -209,10 +305,19 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
         child: InkWell(
           onTap: onPressed,
           borderRadius: BorderRadius.circular(size / 2),
-          child: Icon(
-            icon,
-            color: color,
-            size: size * 0.4,
+          child: Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: color.withOpacity(0.2),
+                width: 2,
+              ),
+            ),
+            child: Icon(
+              icon,
+              color: color,
+              size: size * 0.4,
+            ),
           ),
         ),
       ),

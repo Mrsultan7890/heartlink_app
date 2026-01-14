@@ -61,21 +61,40 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                               Stack(
                                 children: [
                                   Container(
-                                    width: 120,
-                                    height: 120,
+                                    width: 140,
+                                    height: 140,
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
                                       border: Border.all(color: Colors.white, width: 4),
-                                      image: user.profileImages.isNotEmpty
-                                          ? DecorationImage(
-                                              image: CachedNetworkImageProvider(user.profileImages.first),
-                                              fit: BoxFit.cover,
-                                            )
-                                          : null,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.2),
+                                          blurRadius: 15,
+                                          offset: const Offset(0, 5),
+                                        ),
+                                      ],
                                     ),
-                                    child: user.profileImages.isEmpty
-                                        ? const Icon(Icons.person, size: 60, color: Colors.white)
-                                        : null,
+                                    child: ClipOval(
+                                      child: user.profileImages.isNotEmpty
+                                          ? CachedNetworkImage(
+                                              imageUrl: user.profileImages.first,
+                                              fit: BoxFit.cover,
+                                              width: 140,
+                                              height: 140,
+                                              placeholder: (context, url) => Container(
+                                                color: Colors.grey[300],
+                                                child: const Icon(Icons.person, size: 60, color: Colors.grey),
+                                              ),
+                                              errorWidget: (context, url, error) => Container(
+                                                color: Colors.grey[300],
+                                                child: const Icon(Icons.person, size: 60, color: Colors.grey),
+                                              ),
+                                            )
+                                          : Container(
+                                              color: Colors.white.withOpacity(0.9),
+                                              child: const Icon(Icons.person, size: 70, color: Colors.grey),
+                                            ),
+                                    ),
                                   ),
                                   if (user.isVerified)
                                     Positioned(
@@ -94,54 +113,135 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                               ),
                               const SizedBox(height: 16),
                               // Name & Age
-                              Text(
-                                '${user.name}, ${user.age ?? "N/A"}',
-                                style: const TextStyle(
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
+                              Container(
+                                constraints: const BoxConstraints(maxWidth: 300),
+                                child: Text(
+                                  '${user.name}, ${user.age ?? "N/A"}',
+                                  style: const TextStyle(
+                                    fontSize: 28,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                    shadows: [
+                                      Shadow(
+                                        offset: Offset(0, 2),
+                                        blurRadius: 4,
+                                        color: Colors.black26,
+                                      ),
+                                    ],
+                                  ),
+                                  textAlign: TextAlign.center,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                               const SizedBox(height: 8),
                               // Location
                               if (user.location != null)
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const Icon(Icons.location_on, color: Colors.white70, size: 16),
-                                    const SizedBox(width: 4),
-                                    Text(
-                                      user.location ?? '',
-                                      style: const TextStyle(color: Colors.white70),
-                                    ),
-                                  ],
+                                Container(
+                                  constraints: const BoxConstraints(maxWidth: 280),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Icon(Icons.location_on, color: Colors.white70, size: 18),
+                                      const SizedBox(width: 6),
+                                      Flexible(
+                                        child: Text(
+                                          user.location ?? '',
+                                          style: const TextStyle(
+                                            color: Colors.white70,
+                                            fontSize: 16,
+                                            shadows: [
+                                              Shadow(
+                                                offset: Offset(0, 1),
+                                                blurRadius: 2,
+                                                color: Colors.black26,
+                                              ),
+                                            ],
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               const SizedBox(height: 24),
                             ],
                           ),
                         ),
 
-                        // Edit Profile Button
+                        // Action Buttons
                         Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Row(
+                          padding: const EdgeInsets.all(20),
+                          child: Column(
                             children: [
-                              Expanded(
-                                child: CustomButton(
-                                  text: 'Edit Profile',
-                                  onPressed: () => context.push(AppRoutes.editProfile),
-                                  icon: Icons.edit,
-                                  gradient: AppTheme.primaryGradient,
-                                ),
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: CustomButton(
-                                  text: 'Manage Photos',
-                                  onPressed: () => context.push(AppRoutes.photoUpload),
-                                  icon: Icons.photo_library,
-                                  backgroundColor: AppTheme.secondaryColor,
-                                ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Container(
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                        gradient: AppTheme.primaryGradient,
+                                        borderRadius: BorderRadius.circular(25),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: AppTheme.primaryColor.withOpacity(0.3),
+                                            blurRadius: 8,
+                                            offset: const Offset(0, 4),
+                                          ),
+                                        ],
+                                      ),
+                                      child: ElevatedButton.icon(
+                                        onPressed: () => context.push(AppRoutes.editProfile),
+                                        icon: const Icon(Icons.edit, color: Colors.white),
+                                        label: const Text(
+                                          'Edit Profile',
+                                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+                                        ),
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.transparent,
+                                          shadowColor: Colors.transparent,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(25),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Container(
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(25),
+                                        border: Border.all(color: AppTheme.primaryColor, width: 2),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black.withOpacity(0.1),
+                                            blurRadius: 8,
+                                            offset: const Offset(0, 4),
+                                          ),
+                                        ],
+                                      ),
+                                      child: ElevatedButton.icon(
+                                        onPressed: () => context.push(AppRoutes.photoUpload),
+                                        icon: Icon(Icons.photo_camera, color: AppTheme.primaryColor),
+                                        label: Text(
+                                          'Photos',
+                                          style: TextStyle(color: AppTheme.primaryColor, fontWeight: FontWeight.w600),
+                                        ),
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.transparent,
+                                          shadowColor: Colors.transparent,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(25),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
@@ -151,8 +251,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         _buildInfoCard(
                           context,
                           'About Me',
-                          user.bio ?? 'No bio yet',
-                          Icons.info_outline,
+                          user.bio ?? 'Tell everyone about yourself! Add a bio to make your profile more attractive.',
+                          Icons.favorite_border,
                         ),
 
                         if (user.interests.isNotEmpty)
@@ -174,20 +274,47 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         if (user.isPremium)
                           Container(
                             margin: const EdgeInsets.all(16),
-                            padding: const EdgeInsets.all(16),
+                            padding: const EdgeInsets.all(20),
                             decoration: BoxDecoration(
                               gradient: const LinearGradient(
-                                colors: [Colors.amber, Colors.orange],
+                                colors: [Color(0xFFFFD700), Color(0xFFFFA500)],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
                               ),
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(16),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.orange.withOpacity(0.3),
+                                  blurRadius: 10,
+                                  offset: const Offset(0, 4),
+                                ),
+                              ],
                             ),
                             child: Row(
                               children: [
-                                const Icon(Icons.star, color: Colors.white),
-                                const SizedBox(width: 8),
-                                const Text(
-                                  'Premium Member',
-                                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                                const Icon(Icons.diamond, color: Colors.white, size: 28),
+                                const SizedBox(width: 12),
+                                const Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Premium Member',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                      Text(
+                                        'Unlimited likes & super likes',
+                                        style: TextStyle(
+                                          color: Colors.white70,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
