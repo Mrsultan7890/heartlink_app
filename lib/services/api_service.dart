@@ -142,6 +142,20 @@ abstract class ApiService {
   @PUT('/users/preferences')
   Future<PreferencesResponse> updatePreferences(@Body() Map<String, dynamic> preferences);
   
+  // Block Endpoints
+  @POST('/block/{userId}')
+  Future<Map<String, dynamic>> blockUser(@Path('userId') String userId);
+  
+  @DELETE('/unblock/{userId}')
+  Future<Map<String, dynamic>> unblockUser(@Path('userId') String userId);
+  
+  @GET('/blocked')
+  Future<Map<String, dynamic>> getBlockedUsers();
+  
+  // Report Endpoint
+  @POST('/report')
+  Future<Map<String, dynamic>> reportUser(@Body() ReportRequest request);
+  
   // Match Endpoints
   @POST('/matches/swipe')
   Future<SwipeResponse> swipeUser(@Body() SwipeRequest request);
@@ -505,6 +519,24 @@ class PreferencesResponse {
   factory PreferencesResponse.fromJson(Map<String, dynamic> json) =>
       _$PreferencesResponseFromJson(json);
   Map<String, dynamic> toJson() => _$PreferencesResponseToJson(this);
+}
+
+@JsonSerializable()
+class ReportRequest {
+  @JsonKey(name: 'reported_user_id')
+  final String reportedUserId;
+  final String reason;
+  final String details;
+  
+  ReportRequest({
+    required this.reportedUserId,
+    required this.reason,
+    this.details = '',
+  });
+  
+  factory ReportRequest.fromJson(Map<String, dynamic> json) =>
+      _$ReportRequestFromJson(json);
+  Map<String, dynamic> toJson() => _$ReportRequestToJson(this);
 }
 
 // Static helper methods

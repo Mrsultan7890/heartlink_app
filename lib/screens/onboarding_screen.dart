@@ -18,7 +18,7 @@ class OnboardingScreen extends ConsumerWidget {
           ),
         ),
         child: SafeArea(
-          child: Padding(
+          child: SingleChildScrollView(
             padding: const EdgeInsets.all(24.0),
             child: Column(
               children: [
@@ -113,7 +113,7 @@ class OnboardingScreen extends ConsumerWidget {
                   ),
                 ),
                 
-                const SizedBox(height: 40),
+                const SizedBox(height: 16),
               ],
             ),
           ),

@@ -68,13 +68,13 @@ class SettingsScreen extends ConsumerWidget {
                   icon: Icons.security_outlined,
                   title: 'Privacy Settings',
                   subtitle: 'Control who can see your profile',
-                  onTap: () => context.push(AppRoutes.privacy),
+                  onTap: () => context.push('/settings/privacy'),
                 ),
                 _buildSettingsTile(
                   icon: Icons.block_outlined,
                   title: 'Blocked Users',
                   subtitle: 'Manage blocked profiles',
-                  onTap: () => _showBlockedUsers(context),
+                  onTap: () => context.push('/settings/blocked-users'),
                 ),
                 _buildSettingsTile(
                   icon: Icons.report_outlined,
@@ -92,7 +92,7 @@ class SettingsScreen extends ConsumerWidget {
                   icon: Icons.notifications_outlined,
                   title: 'Push Notifications',
                   subtitle: 'Manage notification preferences',
-                  onTap: () => context.push(AppRoutes.notifications),
+                  onTap: () => context.push('/settings/notifications'),
                 ),
                 _buildSettingsTile(
                   icon: Icons.email_outlined,

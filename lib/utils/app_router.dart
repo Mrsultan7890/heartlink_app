@@ -18,6 +18,7 @@ import '../screens/chat/chat_screen.dart';
 import '../screens/settings/settings_screen.dart';
 import '../screens/settings/privacy_screen.dart';
 import '../screens/settings/notifications_screen.dart';
+import '../screens/settings/blocked_users_screen.dart';
 import '../screens/premium/premium_screen.dart';
 import '../providers/auth_provider.dart';
 
@@ -39,6 +40,7 @@ class AppRoutes {
   static const String settings = '/settings';
   static const String privacy = '/privacy';
   static const String notifications = '/notifications';
+  static const String blockedUsers = '/blocked-users';
   static const String premium = '/premium';
   static const String terms = '/terms';
   static const String privacyPolicy = '/privacy-policy';
@@ -194,6 +196,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             path: 'notifications',
             name: 'notifications',
             builder: (context, state) => const NotificationsScreen(),
+          ),
+          GoRoute(
+            path: 'blocked-users',
+            name: 'blocked-users',
+            builder: (context, state) => const BlockedUsersScreen(),
           ),
         ],
       ),
