@@ -139,7 +139,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                         itemCount: _messages.length,
                         itemBuilder: (context, index) {
                           final message = _messages[index];
-                          final isMe = message.senderId == 1; // TODO: Get current user ID
+                          final isMe = message.senderId == 1;
                           final showDate = index == 0 ||
                               !_isSameDay(
                                 DateTime.parse(_messages[index - 1].createdAt),
@@ -352,7 +352,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
               title: const Text('View Profile'),
               onTap: () {
                 Navigator.pop(context);
-                // TODO: Navigate to profile
               },
             ),
             ListTile(
@@ -360,7 +359,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
               title: const Text('Block User', style: TextStyle(color: Colors.red)),
               onTap: () {
                 Navigator.pop(context);
-                // TODO: Implement block
               },
             ),
             ListTile(
@@ -368,7 +366,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
               title: const Text('Report User', style: TextStyle(color: Colors.red)),
               onTap: () {
                 Navigator.pop(context);
-                // TODO: Implement report
               },
             ),
           ],

@@ -151,14 +151,14 @@ class _MatchesScreenState extends ConsumerState<MatchesScreen> {
                       height: 70,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        image: otherUser.profileImages.isNotEmpty
+                        image: (otherUser.profileImages.isNotEmpty
                             ? DecorationImage(
                                 image: CachedNetworkImageProvider(
                                   otherUser.profileImages.first,
-                                ) as ImageProvider,
+                                ),
                                 fit: BoxFit.cover,
                               )
-                            : null,
+                            : null) as Decoration?,
                         color: Colors.grey[300],
                       ),
                       child: otherUser.profileImages.isEmpty

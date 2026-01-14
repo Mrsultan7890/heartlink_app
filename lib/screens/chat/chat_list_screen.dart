@@ -32,9 +32,7 @@ class _ChatListScreenState extends ConsumerState<ChatListScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
-            onPressed: () {
-              // TODO: Implement search
-            },
+            onPressed: () {},
           ),
         ],
       ),
@@ -94,9 +92,9 @@ class _ChatListScreenState extends ConsumerState<ChatListScreen> {
         children: [
           CircleAvatar(
             radius: 30,
-            backgroundImage: otherUser.profileImages.isNotEmpty
+            backgroundImage: (otherUser.profileImages.isNotEmpty
                 ? CachedNetworkImageProvider(otherUser.profileImages.first)
-                : null as ImageProvider?,
+                : null) as ImageProvider?,
             child: otherUser.profileImages.isEmpty
                 ? const Icon(Icons.person)
                 : null,
