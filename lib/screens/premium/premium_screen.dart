@@ -334,7 +334,7 @@ class _PremiumScreenState extends ConsumerState<PremiumScreen> {
           final index = entry.key;
           final plan = entry.value;
           return _buildPricingCard(plan, index);
-        }).toList(),
+        }),
       ],
     );
   }

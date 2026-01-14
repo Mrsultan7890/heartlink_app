@@ -438,7 +438,7 @@ class SettingsScreen extends ConsumerWidget {
   }
 
   Widget _buildDeleteAccountButton(BuildContext context, WidgetRef ref) {
-    return Container(
+    return SizedBox(
       width: double.infinity,
       child: TextButton(
         onPressed: () => _showDeleteAccountDialog(context, ref),
@@ -598,7 +598,7 @@ class SettingsScreen extends ConsumerWidget {
   }
 
   void _showLogoutDialog(BuildContext context, WidgetRef ref) {
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Logout'),
@@ -625,7 +625,7 @@ class SettingsScreen extends ConsumerWidget {
   }
 
   void _showDeleteAccountDialog(BuildContext context, WidgetRef ref) {
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Delete Account'),
@@ -640,7 +640,7 @@ class SettingsScreen extends ConsumerWidget {
           TextButton(
             onPressed: () {
               Navigator.pop(context);
-              // TODO: Implement delete account
+              // TODO(dev): Implement delete account
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text('Account deletion will be available soon'),
@@ -672,7 +672,7 @@ class SettingsScreen extends ConsumerWidget {
   }
 
   void _rateApp() {
-    // TODO: Implement app store rating
+    // TODO(dev): Implement app store rating
     _launchUrl('https://play.google.com/store/apps/details?id=com.heartlink.app');
   }
 

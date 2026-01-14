@@ -462,22 +462,24 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
 
       if (placemarks.isNotEmpty) {
         final place = placemarks[0];
-        String address = '';
+        final address = StringBuffer();
         
         if (place.locality != null && place.locality!.isNotEmpty) {
-          address = place.locality!;
+          address.write(place.locality!);
         }
         if (place.administrativeArea != null && place.administrativeArea!.isNotEmpty) {
-          if (address.isNotEmpty) address += ', ';
-          address += place.administrativeArea!;
+          if (address.isNotEmpty) address.write(', ');
+          address.write(place.administrativeArea!);
         }
         if (place.country != null && place.country!.isNotEmpty) {
-          if (address.isNotEmpty) address += ', ';
-          address += place.country!;
+          if (address.isNotEmpty) address.write(', ');
+          address.write(place.country!);
         }
 
+        final locationString = address.toString();
+
         setState(() {
-          _locationController.text = address;
+          _locationController.text = locationString;
         });
 
         // Update backend with coordinates
@@ -485,7 +487,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
           await ref.read(userProvider.notifier).updateLocation(
             position.latitude,
             position.longitude,
-            locationName: address,
+            locationName: locationString,
           );
         } catch (e) {
           // Location text is set, backend update failed but that's ok
@@ -495,7 +497,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Location updated: $address'),
+              content: Text('Location updated: $locationString'),
               backgroundColor: Colors.green,
             ),
           );

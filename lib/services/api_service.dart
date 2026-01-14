@@ -502,18 +502,18 @@ class ApiServiceHelpers {
   }
   
   static Future<void> updateUserLocation(double latitude, double longitude, {String? locationName}) async {
-    await ApiService.instance.updateLocation(LocationUpdateRequest(
-      latitude: latitude,
-      longitude: longitude,
-      locationName: locationName,
-    ));
+    await ApiService.instance.updateLocation(
+      latitude,
+      longitude,
+      locationName,
+    );
   }
   
   static Future<void> updateInterests(List<String> interests) async {
-    await ApiService.instance.updateInterests(InterestsUpdateRequest(interests: interests));
+    await ApiService.instance.updateInterests({'interests': interests});
   }
   
   static Future<void> updateRelationshipIntent(String intent) async {
-    await ApiService.instance.updateRelationshipIntent(RelationshipIntentRequest(intent: intent));
+    await ApiService.instance.updateRelationshipIntent(intent);
   }
 }

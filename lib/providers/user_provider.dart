@@ -49,12 +49,6 @@ class UserNotifier extends StateNotifier<UserState> {
   }) async {
     state = state.copyWith(isLoading: true);
     try {
-      final request = UpdateProfileRequest(
-        name: name,
-        age: age,
-        bio: bio,
-        location: location,
-      );
       // Update interests if provided
       if (interests != null) {
         await ApiService.instance.updateInterests(
