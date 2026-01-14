@@ -111,7 +111,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                     const Icon(Icons.location_on, color: Colors.white70, size: 16),
                                     const SizedBox(width: 4),
                                     Text(
-                                      user.location!,
+                                      user.location ?? '',
                                       style: const TextStyle(color: Colors.white70),
                                     ),
                                   ],

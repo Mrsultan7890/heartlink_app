@@ -84,7 +84,6 @@ class _ChatListScreenState extends ConsumerState<ChatListScreen> {
 
   Widget _buildChatTile(dynamic match) {
     final dynamic otherUser = match.user2Profile ?? match.user1Profile;
-    final bool hasUnread = false;
     final bool hasImages = otherUser.profileImages?.isNotEmpty ?? false;
 
     return ListTile(
@@ -96,20 +95,12 @@ class _ChatListScreenState extends ConsumerState<ChatListScreen> {
             : null,
         child: !hasImages ? const Icon(Icons.person) : null,
       ),
-      title: Text(
-        otherUser.name as String,
-        style: TextStyle(
-          fontWeight: hasUnread ? FontWeight.bold : FontWeight.normal,
-        ),
-      ),
+      title: Text(otherUser.name as String),
       subtitle: Text(
         (match.lastMessage as String?) ?? 'Start a conversation',
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
-        style: TextStyle(
-          color: hasUnread ? Colors.black87 : AppTheme.textSecondary,
-          fontWeight: hasUnread ? FontWeight.w500 : FontWeight.normal,
-        ),
+        style: TextStyle(color: AppTheme.textSecondary),
       ),
       trailing: match.lastMessageTime != null
           ? Text(

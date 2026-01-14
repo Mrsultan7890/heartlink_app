@@ -239,7 +239,7 @@ class _MatchesScreenState extends ConsumerState<MatchesScreen> {
                             const SizedBox(width: 4),
                             Expanded(
                               child: Text(
-                                location!,
+                                location,
                                 style: TextStyle(
                                   color: AppTheme.textSecondary,
                                   fontSize: 14,
@@ -252,7 +252,7 @@ class _MatchesScreenState extends ConsumerState<MatchesScreen> {
                       const SizedBox(height: 4),
                       if (lastMessage != null)
                         Text(
-                          lastMessage!,
+                          lastMessage,
                           style: TextStyle(
                             color: AppTheme.textSecondary,
                             fontSize: 14,
