@@ -77,8 +77,8 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
-            shrinkResources false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         
@@ -92,7 +92,7 @@ android {
     // Bundle configuration
     bundle {
         language {
-            enableSplit = false
+            enableSplit = true
         }
         density {
             enableSplit = true
