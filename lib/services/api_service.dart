@@ -137,10 +137,10 @@ abstract class ApiService {
   Future<AvailableInterestsResponse> getAvailableInterests();
   
   @GET('/users/preferences')
-  Future<PreferencesResponse> getPreferences();
+  Future<Map<String, dynamic>> getPreferences();
   
   @PUT('/users/preferences')
-  Future<PreferencesResponse> updatePreferences(@Body() Map<String, dynamic> preferences);
+  Future<Map<String, dynamic>> updatePreferences(@Body() Map<String, dynamic> preferences);
   
   // Block Endpoints
   @POST('/block/{userId}')
@@ -504,21 +504,6 @@ class AvailableInterestsResponse {
   factory AvailableInterestsResponse.fromJson(Map<String, dynamic> json) =>
       _$AvailableInterestsResponseFromJson(json);
   Map<String, dynamic> toJson() => _$AvailableInterestsResponseToJson(this);
-}
-
-@JsonSerializable()
-class PreferencesResponse {
-  final String message;
-  final Map<String, dynamic> preferences;
-  
-  PreferencesResponse({
-    this.message = '',
-    required this.preferences,
-  });
-  
-  factory PreferencesResponse.fromJson(Map<String, dynamic> json) =>
-      _$PreferencesResponseFromJson(json);
-  Map<String, dynamic> toJson() => _$PreferencesResponseToJson(this);
 }
 
 @JsonSerializable()
