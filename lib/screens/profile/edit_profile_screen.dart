@@ -462,25 +462,19 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
 
       if (placemarks.isNotEmpty) {
         final place = placemarks[0];
-        final address = StringBuffer();
+        final parts = <String>[];
         
         if (place.locality?.isNotEmpty ?? false) {
-          address.write(place.locality);
+          parts.add(place.locality!);
         }
         if (place.administrativeArea?.isNotEmpty ?? false) {
-          if (address.length > 0) {
-            address.write(', ');
-          }
-          address.write(place.administrativeArea);
+          parts.add(place.administrativeArea!);
         }
         if (place.country?.isNotEmpty ?? false) {
-          if (address.length > 0) {
-            address.write(', ');
-          }
-          address.write(place.country);
+          parts.add(place.country!);
         }
 
-        final locationString = address.toString();
+        final locationString = parts.join(', ');
 
         setState(() {
           _locationController.text = locationString;
