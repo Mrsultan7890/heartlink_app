@@ -145,8 +145,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                           final isMe = message.senderId == 1;
                           final showDate = index == 0 ||
                               !_isSameDay(
-                                DateTime.parse(_messages[index - 1].createdAt),
-                                DateTime.parse(message.createdAt),
+                                _messages[index - 1].createdAt,
+                                message.createdAt,
                               );
 
                           return Column(
@@ -195,8 +195,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     );
   }
 
-  Widget _buildDateDivider(String dateStr) {
-    final date = DateTime.parse(dateStr);
+  Widget _buildDateDivider(DateTime date) {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final yesterday = today.subtract(const Duration(days: 1));
@@ -264,7 +263,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
             ),
             const SizedBox(height: 4),
             Text(
-              DateFormat('HH:mm').format(DateTime.parse(message.createdAt)),
+              DateFormat('HH:mm').format(message.createdAt),
               style: TextStyle(
                 color: isMe ? Colors.white70 : Colors.grey[600],
                 fontSize: 11,
