@@ -27,7 +27,7 @@ jobs:
       
     - name: Clean old generated files
       run: |
-        rm -f lib/services/api_service.g.dart
+        find . -name "*.g.dart" -type f -delete
         rm -rf .dart_tool/build
       
     - name: Generate code
