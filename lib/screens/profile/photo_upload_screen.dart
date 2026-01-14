@@ -8,7 +8,6 @@ import 'dart:convert';
 import '../../providers/user_provider.dart';
 import '../../services/api_service.dart';
 import '../../utils/app_theme.dart';
-import '../../widgets/common/custom_button.dart';
 
 class PhotoUploadScreen extends ConsumerStatefulWidget {
   const PhotoUploadScreen({super.key});

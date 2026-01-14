@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
-import '../../providers/user_provider.dart';
 import '../../utils/app_theme.dart';
 import '../../utils/app_router.dart';
 import '../../widgets/common/custom_button.dart';
@@ -156,7 +155,7 @@ class _MatchesScreenState extends ConsumerState<MatchesScreen> {
                             ? DecorationImage(
                                 image: CachedNetworkImageProvider(
                                   otherUser.profileImages.first,
-                                ),
+                                ) as ImageProvider,
                                 fit: BoxFit.cover,
                               )
                             : null,
@@ -310,11 +309,8 @@ class MatchesNotifier extends StateNotifier<MatchesState> {
   Future<void> loadMatches() async {
     state = state.copyWith(isLoading: true);
     try {
-      // TODO: Implement API call
-      // final matches = await ApiService.instance.getMatches();
-      await Future.delayed(const Duration(seconds: 1)); // Simulate API call
       state = state.copyWith(
-        matches: [], // Empty for now
+        matches: const [],
         isLoading: false,
       );
     } catch (e) {

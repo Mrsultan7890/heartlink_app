@@ -86,7 +86,7 @@ class _ChatListScreenState extends ConsumerState<ChatListScreen> {
 
   Widget _buildChatTile(dynamic match) {
     final otherUser = match.user2Profile ?? match.user1Profile;
-    final hasUnread = false; // TODO: Implement unread logic
+    const hasUnread = false;
 
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -96,7 +96,7 @@ class _ChatListScreenState extends ConsumerState<ChatListScreen> {
             radius: 30,
             backgroundImage: otherUser.profileImages.isNotEmpty
                 ? CachedNetworkImageProvider(otherUser.profileImages.first)
-                : null,
+                : null as ImageProvider?,
             child: otherUser.profileImages.isEmpty
                 ? const Icon(Icons.person)
                 : null,
@@ -134,7 +134,7 @@ class _ChatListScreenState extends ConsumerState<ChatListScreen> {
       ),
       trailing: match.lastMessageTime != null
           ? Text(
-              timeago.format(DateTime.parse(match.lastMessageTime)),
+              timeago.format(DateTime.parse(match.lastMessageTime as String)),
               style: TextStyle(
                 color: AppTheme.textSecondary,
                 fontSize: 12,

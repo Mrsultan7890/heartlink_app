@@ -363,7 +363,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   }
 
   void _showLogoutDialog(BuildContext context) {
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Logout'),

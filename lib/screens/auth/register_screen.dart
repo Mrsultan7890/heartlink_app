@@ -340,18 +340,18 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   }
 
   void _showTermsDialog() {
-    Navigator.push(
+    Navigator.push<void>(
       context,
-      MaterialPageRoute(
+      MaterialPageRoute<void>(
         builder: (context) => const TermsScreen(),
       ),
     );
   }
 
   void _showPrivacyDialog() {
-    Navigator.push(
+    Navigator.push<void>(
       context,
-      MaterialPageRoute(
+      MaterialPageRoute<void>(
         builder: (context) => const PrivacyPolicyScreen(),
       ),
     );

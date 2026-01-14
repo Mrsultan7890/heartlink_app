@@ -341,7 +341,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   }
 
   void _showOptionsMenu() {
-    showModalBottomSheet(
+    showModalBottomSheet<void>(
       context: context,
       builder: (context) => SafeArea(
         child: Column(
