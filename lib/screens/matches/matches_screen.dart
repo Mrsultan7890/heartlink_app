@@ -155,8 +155,6 @@ class _MatchesScreenState extends ConsumerState<MatchesScreen> {
                       height: 70,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
                         image: hasImages
                             ? DecorationImage(
                                 image: CachedNetworkImageProvider(
