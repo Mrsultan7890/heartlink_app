@@ -10,6 +10,8 @@ import '../../utils/constants.dart';
 import '../../widgets/common/custom_button.dart';
 import '../../widgets/common/custom_text_field.dart';
 import '../../widgets/common/loading_overlay.dart';
+import '../settings/terms_screen.dart';
+import '../settings/privacy_policy_screen.dart';
 
 class RegisterScreen extends ConsumerStatefulWidget {
   const RegisterScreen({super.key});
@@ -293,33 +295,66 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     return CheckboxListTile(
       value: _acceptTerms,
       onChanged: (value) => setState(() => _acceptTerms = value ?? false),
-      title: RichText(
-        text: TextSpan(
-          style: Theme.of(context).textTheme.bodyMedium,
-          children: [
-            const TextSpan(text: 'I agree to the '),
-            TextSpan(
-              text: 'Terms of Service',
-              style: TextStyle(
-                color: AppTheme.primaryColor,
-                fontWeight: FontWeight.w600,
+      title: GestureDetector(
+        onTap: () {},
+        child: RichText(
+          text: TextSpan(
+            style: Theme.of(context).textTheme.bodyMedium,
+            children: [
+              const TextSpan(text: 'I agree to the '),
+              WidgetSpan(
+                child: GestureDetector(
+                  onTap: () => _showTermsDialog(),
+                  child: Text(
+                    'Terms of Service',
+                    style: TextStyle(
+                      color: AppTheme.primaryColor,
+                      fontWeight: FontWeight.w600,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                ),
               ),
-            ),
-            const TextSpan(text: ' and '),
-            TextSpan(
-              text: 'Privacy Policy',
-              style: TextStyle(
-                color: AppTheme.primaryColor,
-                fontWeight: FontWeight.w600,
+              const TextSpan(text: ' and '),
+              WidgetSpan(
+                child: GestureDetector(
+                  onTap: () => _showPrivacyDialog(),
+                  child: Text(
+                    'Privacy Policy',
+                    style: TextStyle(
+                      color: AppTheme.primaryColor,
+                      fontWeight: FontWeight.w600,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
       controlAffinity: ListTileControlAffinity.leading,
       contentPadding: EdgeInsets.zero,
       activeColor: AppTheme.primaryColor,
     ).animate().fadeIn(delay: 1800.ms);
+  }
+
+  void _showTermsDialog() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const TermsScreen(),
+      ),
+    );
+  }
+
+  void _showPrivacyDialog() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const PrivacyPolicyScreen(),
+      ),
+    );
   }
 
   Widget _buildRegisterButton() {

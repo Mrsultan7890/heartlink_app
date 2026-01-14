@@ -121,8 +121,9 @@ class _PhotoUploadScreenState extends ConsumerState<PhotoUploadScreen> {
                     },
                   ),
 
-                  if (_isUploading) ..[
+                  if (_isUploading)
                     const SizedBox(height: 24),
+                  if (_isUploading)
                     const Center(
                       child: Column(
                         children: [
@@ -132,7 +133,6 @@ class _PhotoUploadScreenState extends ConsumerState<PhotoUploadScreen> {
                         ],
                       ),
                     ),
-                  ],
                 ],
               ),
             ),
