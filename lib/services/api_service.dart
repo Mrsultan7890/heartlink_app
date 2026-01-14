@@ -128,10 +128,10 @@ abstract class ApiService {
   );
   
   @PUT('/users/interests')
-  Future<Map<String, dynamic>> updateInterests(@Body() Map<String, dynamic> request);
+  Future<InterestsUpdateResponse> updateInterests(@Body() InterestsUpdateRequest request);
   
   @PUT('/users/relationship-intent')
-  Future<Map<String, dynamic>> updateRelationshipIntent(@Query('intent') String intent);
+  Future<RelationshipIntentResponse> updateRelationshipIntent(@Body() RelationshipIntentRequest request);
   
   @GET('/users/interests')
   Future<AvailableInterestsResponse> getAvailableInterests();
@@ -218,20 +218,18 @@ class AuthResponse {
   Map<String, dynamic> toJson() => _$AuthResponseToJson(this);
 }
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class UpdateProfileRequest {
   final String? name;
   final int? age;
   final String? bio;
   final String? location;
-  final Map<String, dynamic>? preferences;
   
   UpdateProfileRequest({
     this.name,
     this.age,
     this.bio,
     this.location,
-    this.preferences,
   });
   
   factory UpdateProfileRequest.fromJson(Map<String, dynamic> json) =>
@@ -337,13 +335,13 @@ class UnreadCountResponse {
 }
 
 // New Request/Response Models for Advanced Features
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class DiscoverResponse {
   final List<UserModel> users;
   @JsonKey(name: 'total_found')
   final int totalFound;
   @JsonKey(name: 'filters_applied')
-  final Map<String, dynamic> filtersApplied;
+  final Map<String, String> filtersApplied;
   
   DiscoverResponse({
     required this.users,
@@ -356,7 +354,7 @@ class DiscoverResponse {
   Map<String, dynamic> toJson() => _$DiscoverResponseToJson(this);
 }
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class NearbyUsersResponse {
   @JsonKey(name: 'nearby_users')
   final List<UserModel> nearbyUsers;
@@ -510,10 +508,14 @@ class ApiServiceHelpers {
   }
   
   static Future<void> updateInterests(List<String> interests) async {
-    await ApiService.instance.updateInterests({'interests': interests});
+    await ApiService.instance.updateInterests(
+      InterestsUpdateRequest(interests: interests),
+    );
   }
   
   static Future<void> updateRelationshipIntent(String intent) async {
-    await ApiService.instance.updateRelationshipIntent(intent);
+    await ApiService.instance.updateRelationshipIntent(
+      RelationshipIntentRequest(intent: intent),
+    );
   }
 }

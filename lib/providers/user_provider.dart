@@ -52,14 +52,14 @@ class UserNotifier extends StateNotifier<UserState> {
       // Update interests if provided
       if (interests != null) {
         await ApiService.instance.updateInterests(
-          {'interests': interests},
+          InterestsUpdateRequest(interests: interests),
         );
       }
       
       // Update relationship intent if provided
       if (relationshipIntent != null) {
         await ApiService.instance.updateRelationshipIntent(
-          relationshipIntent,
+          RelationshipIntentRequest(intent: relationshipIntent),
         );
       }
       
@@ -88,7 +88,9 @@ class UserNotifier extends StateNotifier<UserState> {
   Future<void> updateInterests(List<String> interests) async {
     state = state.copyWith(isLoading: true);
     try {
-      await ApiService.instance.updateInterests({'interests': interests});
+      await ApiService.instance.updateInterests(
+        InterestsUpdateRequest(interests: interests),
+      );
       await loadProfile();
     } catch (e) {
       state = state.copyWith(error: e.toString(), isLoading: false);
