@@ -552,16 +552,37 @@ class BlockResponse {
   Map<String, dynamic> toJson() => _$BlockResponseToJson(this);
 }
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class BlockedUsersResponse {
   @JsonKey(name: 'blocked_users')
-  final List<String> blockedUsers;
+  final List<BlockedUser> blockedUsers;
   
   BlockedUsersResponse({required this.blockedUsers});
   
   factory BlockedUsersResponse.fromJson(Map<String, dynamic> json) =>
       _$BlockedUsersResponseFromJson(json);
   Map<String, dynamic> toJson() => _$BlockedUsersResponseToJson(this);
+}
+
+@JsonSerializable()
+class BlockedUser {
+  final String id;
+  final String? name;
+  @JsonKey(name: 'profile_images')
+  final List<String>? profileImages;
+  @JsonKey(name: 'blocked_at')
+  final String? blockedAt;
+  
+  BlockedUser({
+    required this.id,
+    this.name,
+    this.profileImages,
+    this.blockedAt,
+  });
+  
+  factory BlockedUser.fromJson(Map<String, dynamic> json) =>
+      _$BlockedUserFromJson(json);
+  Map<String, dynamic> toJson() => _$BlockedUserToJson(this);
 }
 
 @JsonSerializable()

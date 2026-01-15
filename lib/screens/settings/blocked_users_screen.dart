@@ -10,7 +10,7 @@ class BlockedUsersScreen extends ConsumerStatefulWidget {
 }
 
 class _BlockedUsersScreenState extends ConsumerState<BlockedUsersScreen> {
-  List<Map<String, dynamic>> blockedUsers = [];
+  List<BlockedUser> blockedUsers = [];
   bool isLoading = true;
 
   @override
@@ -23,7 +23,7 @@ class _BlockedUsersScreenState extends ConsumerState<BlockedUsersScreen> {
     try {
       final response = await ApiService.instance.getBlockedUsers();
       setState(() {
-        blockedUsers = List<Map<String, dynamic>>.from(response['blocked_users']);
+        blockedUsers = response.blockedUsers;
         isLoading = false;
       });
     } catch (e) {
@@ -34,7 +34,7 @@ class _BlockedUsersScreenState extends ConsumerState<BlockedUsersScreen> {
   Future<void> _unblockUser(String userId) async {
     try {
       await ApiService.instance.unblockUser(userId);
-      setState(() => blockedUsers.removeWhere((u) => u['id'] == userId));
+      setState(() => blockedUsers.removeWhere((u) => u.id == userId));
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('User unblocked')),
@@ -77,19 +77,17 @@ class _BlockedUsersScreenState extends ConsumerState<BlockedUsersScreen> {
                     final user = blockedUsers[index];
                     return ListTile(
                       leading: CircleAvatar(
-                        backgroundImage: (user['profile_images'] != null && 
-                                         (user['profile_images'] as List).isNotEmpty)
-                            ? NetworkImage(user['profile_images'][0] as String)
+                        backgroundImage: (user.profileImages?.isNotEmpty ?? false)
+                            ? NetworkImage(user.profileImages!.first)
                             : null,
-                        child: (user['profile_images'] == null || 
-                               (user['profile_images'] as List).isEmpty)
+                        child: (user.profileImages?.isEmpty ?? true)
                             ? const Icon(Icons.person)
                             : null,
                       ),
-                      title: Text(user['name'] ?? 'Unknown'),
-                      subtitle: Text('Blocked on ${user['blocked_at']}'),
+                      title: Text(user.name ?? 'User ${user.id}'),
+                      subtitle: user.blockedAt != null ? Text('Blocked on ${user.blockedAt}') : null,
                       trailing: TextButton(
-                        onPressed: () => _unblockUser(user['id']),
+                        onPressed: () => _unblockUser(user.id),
                         child: const Text('Unblock'),
                       ),
                     );
