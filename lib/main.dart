@@ -72,7 +72,7 @@ class _HeartLinkAppState extends ConsumerState<HeartLinkApp> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() => ref.read(authProvider.notifier).initializeAuth());
+    // Don't call initializeAuth here - it's already called in splash
   }
 
   @override

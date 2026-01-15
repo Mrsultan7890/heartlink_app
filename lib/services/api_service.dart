@@ -19,43 +19,56 @@ abstract class ApiService {
   static const _storage = FlutterSecureStorage();
   
   static Future<void> initialize() async {
-    _dio = Dio();
-    
-    // Add interceptors
-    _dio.interceptors.add(LogInterceptor(
-      requestBody: true,
-      responseBody: true,
-      logPrint: (obj) => print(obj),
-    ));
-    
-    _dio.interceptors.add(InterceptorsWrapper(
-      onRequest: (options, handler) async {
-        // Add auth token
-        final token = await _storage.read(key: AppConstants.accessTokenKey);
-        if (token != null) {
-          options.headers['Authorization'] = 'Bearer $token';
-        }
-        options.headers['Content-Type'] = 'application/json';
-        handler.next(options);
-      },
-      onError: (error, handler) async {
-        // Handle token refresh
-        if (error.response?.statusCode == 401) {
-          await _handleTokenRefresh();
-          // Retry request
-          final newToken = await _storage.read(key: AppConstants.accessTokenKey);
-          if (newToken != null) {
-            error.requestOptions.headers['Authorization'] = 'Bearer $newToken';
-            final response = await _dio.fetch<Map<String, dynamic>>(error.requestOptions);
-            handler.resolve(response);
-            return;
+    try {
+      _dio = Dio();
+      
+      // Set timeouts
+      _dio.options.connectTimeout = const Duration(seconds: 5);
+      _dio.options.receiveTimeout = const Duration(seconds: 5);
+      _dio.options.sendTimeout = const Duration(seconds: 5);
+      
+      // Add interceptors
+      _dio.interceptors.add(LogInterceptor(
+        requestBody: true,
+        responseBody: true,
+        logPrint: (obj) => print(obj),
+      ));
+      
+      _dio.interceptors.add(InterceptorsWrapper(
+        onRequest: (options, handler) async {
+          // Add auth token
+          final token = await _storage.read(key: AppConstants.accessTokenKey);
+          if (token != null) {
+            options.headers['Authorization'] = 'Bearer $token';
           }
-        }
-        handler.next(error);
-      },
-    ));
-    
-    _instance = ApiService(_dio);
+          options.headers['Content-Type'] = 'application/json';
+          handler.next(options);
+        },
+        onError: (error, handler) async {
+          // Handle token refresh
+          if (error.response?.statusCode == 401) {
+            await _handleTokenRefresh();
+            // Retry request
+            final newToken = await _storage.read(key: AppConstants.accessTokenKey);
+            if (newToken != null) {
+              error.requestOptions.headers['Authorization'] = 'Bearer $newToken';
+              final response = await _dio.fetch<Map<String, dynamic>>(error.requestOptions);
+              handler.resolve(response);
+              return;
+            }
+          }
+          handler.next(error);
+        },
+      ));
+      
+      _instance = ApiService(_dio);
+      print('✅ API Service initialized');
+    } catch (e) {
+      print('❌ API Service initialization failed: $e');
+      // Create instance anyway to prevent null errors
+      _dio = Dio();
+      _instance = ApiService(_dio);
+    }
   }
   
   static ApiService get instance => _instance;

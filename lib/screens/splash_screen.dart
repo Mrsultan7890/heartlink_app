@@ -50,31 +50,38 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     await Future<void>.delayed(const Duration(milliseconds: 500));
     _textController.forward();
     
-    // Initialize app services with timeout
+    // Wait for minimum splash duration first
+    await Future<void>.delayed(const Duration(milliseconds: 1500));
+    
+    // Initialize app services with timeout (non-blocking)
     try {
       await ref.read(authProvider.notifier).initializeAuth().timeout(
-        const Duration(seconds: 5),
+        const Duration(seconds: 3),
         onTimeout: () {
-          print('⚠️ Auth initialization timeout, proceeding anyway');
+          print('⚠️ Auth initialization timeout - proceeding to onboarding/login');
         },
       );
     } catch (e) {
-      print('⚠️ Auth initialization failed: $e');
+      print('⚠️ Auth initialization failed: $e - proceeding anyway');
     }
     
-    // Wait for minimum splash duration
-    await Future<void>.delayed(const Duration(milliseconds: 1500));
-    
-    // Navigate based on auth state
+    // Navigate based on auth state (always navigate, never hang)
     if (mounted) {
-      final authState = ref.read(authProvider);
-      
-      if (!authState.isOnboarded) {
+      try {
+        final authState = ref.read(authProvider);
+        
+        print('📍 Navigation: onboarded=${authState.isOnboarded}, authenticated=${authState.isAuthenticated}');
+        
+        if (!authState.isOnboarded) {
+          context.go(AppRoutes.onboarding);
+        } else if (!authState.isAuthenticated) {
+          context.go(AppRoutes.login);
+        } else {
+          context.go(AppRoutes.home);
+        }
+      } catch (e) {
+        print('❌ Navigation error: $e - going to onboarding');
         context.go(AppRoutes.onboarding);
-      } else if (!authState.isAuthenticated) {
-        context.go(AppRoutes.login);
-      } else {
-        context.go(AppRoutes.home);
       }
     }
   }
