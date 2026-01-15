@@ -354,6 +354,12 @@ class UnreadCountResponse {
   Map<String, dynamic> toJson() => _$UnreadCountResponseToJson(this);
 }
 
+// Converter functions
+Map<String, dynamic> _filtersFromJson(dynamic json) => json as Map<String, dynamic>;
+Map<String, dynamic> _filtersToJson(Map<String, dynamic> map) => map;
+Map<String, dynamic> _locationFromJson(dynamic json) => json as Map<String, dynamic>;
+Map<String, dynamic> _locationToJson(Map<String, dynamic> map) => map;
+
 // New Request/Response Models for Advanced Features
 @JsonSerializable(explicitToJson: true)
 class DiscoverResponse {
@@ -372,9 +378,6 @@ class DiscoverResponse {
   factory DiscoverResponse.fromJson(Map<String, dynamic> json) =>
       _$DiscoverResponseFromJson(json);
   Map<String, dynamic> toJson() => _$DiscoverResponseToJson(this);
-  
-  static Map<String, dynamic> _filtersFromJson(Map<String, dynamic> json) => json;
-  static Map<String, dynamic> _filtersToJson(Map<String, dynamic> map) => map;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -395,9 +398,6 @@ class NearbyUsersResponse {
   factory NearbyUsersResponse.fromJson(Map<String, dynamic> json) =>
       _$NearbyUsersResponseFromJson(json);
   Map<String, dynamic> toJson() => _$NearbyUsersResponseToJson(this);
-  
-  static Map<String, dynamic> _locationFromJson(Map<String, dynamic> json) => json;
-  static Map<String, dynamic> _locationToJson(Map<String, dynamic> map) => map;
 }
 
 @JsonSerializable()
