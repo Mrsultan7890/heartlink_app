@@ -1,5 +1,6 @@
 class AppConstants {
   // API Configuration
+  // TODO: Replace with your actual backend URL
   static const String baseUrl = 'http://localhost:8000';
   static const String apiVersion = '/api';
   

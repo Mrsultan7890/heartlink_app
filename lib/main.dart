@@ -17,24 +17,36 @@ import 'utils/constants.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  // Initialize Firebase
+  // Initialize Firebase (optional)
   try {
     await Firebase.initializeApp();
-    // Initialize Firebase Crashlytics
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
   } catch (e) {
-    print('Firebase initialization failed: $e');
+    print('Firebase not configured: $e');
   }
   
   // Initialize Hive
-  await Hive.initFlutter();
+  try {
+    await Hive.initFlutter();
+  } catch (e) {
+    print('Hive init failed: $e');
+  }
   
   // Initialize SharedPreferences
-  await SharedPreferences.getInstance();
+  try {
+    await SharedPreferences.getInstance();
+  } catch (e) {
+    print('SharedPreferences init failed: $e');
+  }
   
-  // Initialize Services
-  await ApiService.initialize();
-  await AuthService.initialize();
+  // Initialize Services (non-blocking)
+  ApiService.initialize().catchError((e) {
+    print('API Service init failed: $e');
+  });
+  
+  AuthService.initialize().catchError((e) {
+    print('Auth Service init failed: $e');
+  });
   
   // Set preferred orientations
   await SystemChrome.setPreferredOrientations([

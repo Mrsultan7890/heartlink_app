@@ -50,11 +50,20 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     await Future<void>.delayed(const Duration(milliseconds: 500));
     _textController.forward();
     
-    // Initialize app services
-    await ref.read(authProvider.notifier).initializeAuth();
+    // Initialize app services with timeout
+    try {
+      await ref.read(authProvider.notifier).initializeAuth().timeout(
+        const Duration(seconds: 5),
+        onTimeout: () {
+          print('⚠️ Auth initialization timeout, proceeding anyway');
+        },
+      );
+    } catch (e) {
+      print('⚠️ Auth initialization failed: $e');
+    }
     
     // Wait for minimum splash duration
-    await Future<void>.delayed(const Duration(milliseconds: 2500));
+    await Future<void>.delayed(const Duration(milliseconds: 1500));
     
     // Navigate based on auth state
     if (mounted) {

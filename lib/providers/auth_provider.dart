@@ -58,41 +58,50 @@ class AuthNotifier extends StateNotifier<AuthState> {
       final isOnboarded = prefs.getBool(AppConstants.onboardingKey) ?? false;
       print('📱 Onboarded: $isOnboarded');
       
-      // Check for stored token
-      final token = await _storage.read(key: AppConstants.accessTokenKey);
+      // Check for stored token with timeout
+      final token = await _storage.read(key: AppConstants.accessTokenKey)
+          .timeout(const Duration(seconds: 2), onTimeout: () => null);
       print('🔑 Token found: ${token != null}');
       
-      if (token != null) {
-        print('🔑 Token: ${token.substring(0, 20)}...');
-        final isExpired = JwtDecoder.isExpired(token);
-        print('⏰ Token expired: $isExpired');
-        
-        if (!isExpired) {
-          print('✅ Token valid, fetching user...');
-          try {
-            final user = await ApiService.instance.getCurrentUser();
-            print('✅ User loaded: ${user.email}');
-            
-            state = state.copyWith(
-              isAuthenticated: true,
-              isOnboarded: isOnboarded,
-              user: user,
-              isLoading: false,
-            );
-            return;
-          } catch (e) {
-            print('⚠️ Failed to fetch user: $e');
-            state = state.copyWith(
-              isAuthenticated: true,
-              isOnboarded: isOnboarded,
-              isLoading: false,
-            );
-            return;
+      if (token != null && token.isNotEmpty) {
+        try {
+          print('🔑 Token: ${token.substring(0, token.length > 20 ? 20 : token.length)}...');
+          final isExpired = JwtDecoder.isExpired(token);
+          print('⏰ Token expired: $isExpired');
+          
+          if (!isExpired) {
+            print('✅ Token valid, trying to fetch user...');
+            try {
+              final user = await ApiService.instance.getCurrentUser().timeout(
+                const Duration(seconds: 3),
+                onTimeout: () => throw Exception('API timeout'),
+              );
+              print('✅ User loaded: ${user.email}');
+              
+              state = state.copyWith(
+                isAuthenticated: true,
+                isOnboarded: isOnboarded,
+                user: user,
+                isLoading: false,
+              );
+              return;
+            } catch (e) {
+              print('⚠️ Failed to fetch user: $e');
+              // Token exists but API failed - still mark as authenticated for offline mode
+              state = state.copyWith(
+                isAuthenticated: true,
+                isOnboarded: isOnboarded,
+                isLoading: false,
+              );
+              return;
+            }
           }
+        } catch (e) {
+          print('⚠️ Token validation error: $e');
         }
       }
       
-      print('❌ No valid token, logging out');
+      print('❌ No valid token, setting as logged out');
       await _clearAuthData();
       state = state.copyWith(
         isAuthenticated: false,
@@ -101,23 +110,46 @@ class AuthNotifier extends StateNotifier<AuthState> {
       );
     } catch (e) {
       print('❌ Init error: $e');
-      final token = await _storage.read(key: AppConstants.accessTokenKey);
-      final prefs = await SharedPreferences.getInstance();
-      final isOnboarded = prefs.getBool(AppConstants.onboardingKey) ?? false;
-      
-      if (token != null && !JwtDecoder.isExpired(token)) {
-        state = state.copyWith(
-          isAuthenticated: true,
-          isOnboarded: isOnboarded,
-          isLoading: false,
+      // Fallback: try to read basic auth state without API calls
+      try {
+        final prefs = await SharedPreferences.getInstance().timeout(
+          const Duration(seconds: 1),
+          onTimeout: () => throw Exception('SharedPreferences timeout'),
         );
-      } else {
-        await _clearAuthData();
+        final isOnboarded = prefs.getBool(AppConstants.onboardingKey) ?? false;
+        
+        final token = await _storage.read(key: AppConstants.accessTokenKey)
+            .timeout(const Duration(seconds: 1), onTimeout: () => null);
+        
+        if (token != null && token.isNotEmpty) {
+          try {
+            final isExpired = JwtDecoder.isExpired(token);
+            if (!isExpired) {
+              state = state.copyWith(
+                isAuthenticated: true,
+                isOnboarded: isOnboarded,
+                isLoading: false,
+              );
+              return;
+            }
+          } catch (_) {
+            // Token parsing failed, treat as invalid
+          }
+        }
+        
         state = state.copyWith(
           isAuthenticated: false,
           isOnboarded: isOnboarded,
           isLoading: false,
-          error: 'Failed to initialize authentication',
+        );
+      } catch (storageError) {
+        print('❌ Storage error: $storageError');
+        // Complete fallback - assume fresh install
+        state = state.copyWith(
+          isAuthenticated: false,
+          isOnboarded: false,
+          isLoading: false,
+          error: null, // Don't show error for fresh install
         );
       }
     }
