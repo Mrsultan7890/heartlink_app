@@ -36,11 +36,11 @@ jobs:
         flutter pub run build_runner build --delete-conflicting-outputs
       
     - name: Build Release APK
-      run: flutter build apk --release --split-per-abi --dart-define=API_URL=https://heartlink-api.onrender.com --dart-define=WS_URL=wss://heartlink-api.onrender.com/api/chat/ws
+      run: flutter build apk --release
       
-    - name: Upload APK Artifacts
+    - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: heartlink-release-apks
-        path: build/app/outputs/flutter-apk/*.apk
+        name: heartlink-release-apk
+        path: build/app/outputs/flutter-apk/app-release.apk
         retention-days: 30
