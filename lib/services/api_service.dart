@@ -355,12 +355,12 @@ class UnreadCountResponse {
 }
 
 // New Request/Response Models for Advanced Features
-@JsonSerializable(explicitToJson: true, genericArgumentFactories: true)
+@JsonSerializable(explicitToJson: true)
 class DiscoverResponse {
   final List<UserModel> users;
   @JsonKey(name: 'total_found')
   final int totalFound;
-  @JsonKey(name: 'filters_applied')
+  @JsonKey(name: 'filters_applied', fromJson: _filtersFromJson, toJson: _filtersToJson)
   final Map<String, dynamic> filtersApplied;
   
   DiscoverResponse({
@@ -372,15 +372,18 @@ class DiscoverResponse {
   factory DiscoverResponse.fromJson(Map<String, dynamic> json) =>
       _$DiscoverResponseFromJson(json);
   Map<String, dynamic> toJson() => _$DiscoverResponseToJson(this);
+  
+  static Map<String, dynamic> _filtersFromJson(Map<String, dynamic> json) => json;
+  static Map<String, dynamic> _filtersToJson(Map<String, dynamic> map) => map;
 }
 
-@JsonSerializable(explicitToJson: true, genericArgumentFactories: true)
+@JsonSerializable(explicitToJson: true)
 class NearbyUsersResponse {
   @JsonKey(name: 'nearby_users')
   final List<UserModel> nearbyUsers;
   @JsonKey(name: 'radius_km')
   final double radiusKm;
-  @JsonKey(name: 'user_location')
+  @JsonKey(name: 'user_location', fromJson: _locationFromJson, toJson: _locationToJson)
   final Map<String, dynamic> userLocation;
   
   NearbyUsersResponse({
@@ -392,6 +395,9 @@ class NearbyUsersResponse {
   factory NearbyUsersResponse.fromJson(Map<String, dynamic> json) =>
       _$NearbyUsersResponseFromJson(json);
   Map<String, dynamic> toJson() => _$NearbyUsersResponseToJson(this);
+  
+  static Map<String, dynamic> _locationFromJson(Map<String, dynamic> json) => json;
+  static Map<String, dynamic> _locationToJson(Map<String, dynamic> map) => map;
 }
 
 @JsonSerializable()
