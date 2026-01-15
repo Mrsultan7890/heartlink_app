@@ -137,24 +137,24 @@ abstract class ApiService {
   Future<AvailableInterestsResponse> getAvailableInterests();
   
   @GET('/users/preferences')
-  Future<Map<String, dynamic>> getPreferences();
+  Future<PreferencesResponse> getPreferences();
   
   @PUT('/users/preferences')
-  Future<Map<String, dynamic>> updatePreferences(@Body() Map<String, dynamic> preferences);
+  Future<PreferencesResponse> updatePreferences(@Body() Map<String, dynamic> preferences);
   
   // Block Endpoints
   @POST('/block/{userId}')
-  Future<Map<String, dynamic>> blockUser(@Path('userId') String userId);
+  Future<BlockResponse> blockUser(@Path('userId') String userId);
   
   @DELETE('/unblock/{userId}')
-  Future<Map<String, dynamic>> unblockUser(@Path('userId') String userId);
+  Future<BlockResponse> unblockUser(@Path('userId') String userId);
   
   @GET('/blocked')
-  Future<Map<String, dynamic>> getBlockedUsers();
+  Future<BlockedUsersResponse> getBlockedUsers();
   
   // Report Endpoint
   @POST('/report')
-  Future<Map<String, dynamic>> reportUser(@Body() ReportRequest request);
+  Future<ReportResponse> reportUser(@Body() ReportRequest request);
   
   // Match Endpoints
   @POST('/matches/swipe')
@@ -528,6 +528,51 @@ class ReportRequest {
   factory ReportRequest.fromJson(Map<String, dynamic> json) =>
       _$ReportRequestFromJson(json);
   Map<String, dynamic> toJson() => _$ReportRequestToJson(this);
+}
+
+@JsonSerializable()
+class PreferencesResponse {
+  final Map<String, dynamic> preferences;
+  
+  PreferencesResponse({required this.preferences});
+  
+  factory PreferencesResponse.fromJson(Map<String, dynamic> json) =>
+      PreferencesResponse(preferences: json);
+  Map<String, dynamic> toJson() => preferences;
+}
+
+@JsonSerializable()
+class BlockResponse {
+  final String message;
+  
+  BlockResponse({required this.message});
+  
+  factory BlockResponse.fromJson(Map<String, dynamic> json) =>
+      _$BlockResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$BlockResponseToJson(this);
+}
+
+@JsonSerializable()
+class BlockedUsersResponse {
+  @JsonKey(name: 'blocked_users')
+  final List<String> blockedUsers;
+  
+  BlockedUsersResponse({required this.blockedUsers});
+  
+  factory BlockedUsersResponse.fromJson(Map<String, dynamic> json) =>
+      _$BlockedUsersResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$BlockedUsersResponseToJson(this);
+}
+
+@JsonSerializable()
+class ReportResponse {
+  final String message;
+  
+  ReportResponse({required this.message});
+  
+  factory ReportResponse.fromJson(Map<String, dynamic> json) =>
+      _$ReportResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$ReportResponseToJson(this);
 }
 
 // Static helper methods
