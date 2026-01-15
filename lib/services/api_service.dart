@@ -355,7 +355,7 @@ class UnreadCountResponse {
 }
 
 // New Request/Response Models for Advanced Features
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, genericArgumentFactories: true)
 class DiscoverResponse {
   final List<UserModel> users;
   @JsonKey(name: 'total_found')
@@ -374,7 +374,7 @@ class DiscoverResponse {
   Map<String, dynamic> toJson() => _$DiscoverResponseToJson(this);
 }
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, genericArgumentFactories: true)
 class NearbyUsersResponse {
   @JsonKey(name: 'nearby_users')
   final List<UserModel> nearbyUsers;
