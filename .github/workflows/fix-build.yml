@@ -27,6 +27,7 @@ jobs:
       
     - name: Clean old generated files
       run: |
+        git rm -f lib/**/*.g.dart || true
         find . -name "*.g.dart" -type f -delete
         rm -rf .dart_tool/build
       
