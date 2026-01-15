@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'services/api_service.dart';
 import 'services/auth_service.dart';
+import 'providers/auth_provider.dart';
 
 import 'utils/app_router.dart';
 import 'utils/app_theme.dart';
