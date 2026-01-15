@@ -13,6 +13,11 @@ jobs:
     - uses: actions/checkout@v4
       with:
         clean: true
+    
+    - name: Force delete generated files
+      run: |
+        rm -rf lib/**/*.g.dart lib/**/*.freezed.dart .dart_tool build
+        git checkout -- .
       
     - uses: actions/setup-java@v4
       with:
