@@ -48,11 +48,22 @@ void main() async {
   );
 }
 
-class HeartLinkApp extends ConsumerWidget {
+class HeartLinkApp extends ConsumerStatefulWidget {
   const HeartLinkApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HeartLinkApp> createState() => _HeartLinkAppState();
+}
+
+class _HeartLinkAppState extends ConsumerState<HeartLinkApp> {
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() => ref.read(authProvider.notifier).initializeAuth());
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final router = ref.watch(appRouterProvider);
     
     return MaterialApp.router(
