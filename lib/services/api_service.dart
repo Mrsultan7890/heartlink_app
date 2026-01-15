@@ -361,7 +361,7 @@ class DiscoverResponse {
   @JsonKey(name: 'total_found')
   final int totalFound;
   @JsonKey(name: 'filters_applied')
-  final Map<String, String> filtersApplied;
+  final Map<String, dynamic> filtersApplied;
   
   DiscoverResponse({
     required this.users,
@@ -381,7 +381,7 @@ class NearbyUsersResponse {
   @JsonKey(name: 'radius_km')
   final double radiusKm;
   @JsonKey(name: 'user_location')
-  final Map<String, double> userLocation;
+  final Map<String, dynamic> userLocation;
   
   NearbyUsersResponse({
     required this.nearbyUsers,
