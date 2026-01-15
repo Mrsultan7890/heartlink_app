@@ -51,30 +51,22 @@ final appRouterProvider = Provider<GoRouter>((ref) {
   
   return GoRouter(
     initialLocation: AppRoutes.splash,
-    debugLogDiagnostics: true,
+    debugLogDiagnostics: false,
     
     redirect: (context, state) {
       final isLoggedIn = authState.isAuthenticated;
       final isOnboarded = authState.isOnboarded;
+      final isLoading = authState.isLoading;
       final currentPath = state.fullPath ?? '/';
       
-      // Splash screen logic
-      if (currentPath == AppRoutes.splash) {
-        if (!isOnboarded) {
-          return AppRoutes.onboarding;
-        } else if (!isLoggedIn) {
-          return AppRoutes.login;
-        } else {
-          return AppRoutes.home;
-        }
+      if (isLoading || currentPath == AppRoutes.splash) {
+        return null;
       }
       
-      // Protect authenticated routes
       if (!isLoggedIn && _isProtectedRoute(currentPath)) {
         return AppRoutes.login;
       }
       
-      // Redirect authenticated users away from auth screens
       if (isLoggedIn && _isAuthRoute(currentPath)) {
         return AppRoutes.home;
       }

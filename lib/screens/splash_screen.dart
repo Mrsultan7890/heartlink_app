@@ -45,32 +45,21 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   }
   
   Future<void> _initializeApp() async {
-    // Start animations
     _heartController.forward();
     await Future<void>.delayed(const Duration(milliseconds: 500));
     _textController.forward();
-    
-    // Wait for minimum splash duration first
     await Future<void>.delayed(const Duration(milliseconds: 1500));
     
-    // Initialize app services with timeout (non-blocking)
     try {
       await ref.read(authProvider.notifier).initializeAuth().timeout(
         const Duration(seconds: 3),
-        onTimeout: () {
-          print('⚠️ Auth initialization timeout - proceeding to onboarding/login');
-        },
+        onTimeout: () {},
       );
-    } catch (e) {
-      print('⚠️ Auth initialization failed: $e - proceeding anyway');
-    }
+    } catch (e) {}
     
-    // Navigate based on auth state (always navigate, never hang)
     if (mounted) {
       try {
         final authState = ref.read(authProvider);
-        
-        print('📍 Navigation: onboarded=${authState.isOnboarded}, authenticated=${authState.isAuthenticated}');
         
         if (!authState.isOnboarded) {
           context.go(AppRoutes.onboarding);
@@ -80,7 +69,6 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
           context.go(AppRoutes.home);
         }
       } catch (e) {
-        print('❌ Navigation error: $e - going to onboarding');
         context.go(AppRoutes.onboarding);
       }
     }

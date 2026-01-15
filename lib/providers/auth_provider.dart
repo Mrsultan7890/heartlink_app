@@ -47,36 +47,26 @@ class AuthNotifier extends StateNotifier<AuthState> {
   
   static const _storage = FlutterSecureStorage();
   
-  // Initialize authentication state
   Future<void> initializeAuth() async {
-    print('🔐 Initializing auth...');
     state = state.copyWith(isLoading: true);
     
     try {
-      // Check onboarding status
       final prefs = await SharedPreferences.getInstance();
       final isOnboarded = prefs.getBool(AppConstants.onboardingKey) ?? false;
-      print('📱 Onboarded: $isOnboarded');
       
-      // Check for stored token with timeout
       final token = await _storage.read(key: AppConstants.accessTokenKey)
           .timeout(const Duration(seconds: 2), onTimeout: () => null);
-      print('🔑 Token found: ${token != null}');
       
       if (token != null && token.isNotEmpty) {
         try {
-          print('🔑 Token: ${token.substring(0, token.length > 20 ? 20 : token.length)}...');
           final isExpired = JwtDecoder.isExpired(token);
-          print('⏰ Token expired: $isExpired');
           
           if (!isExpired) {
-            print('✅ Token valid, trying to fetch user...');
             try {
               final user = await ApiService.instance.getCurrentUser().timeout(
                 const Duration(seconds: 3),
                 onTimeout: () => throw Exception('API timeout'),
               );
-              print('✅ User loaded: ${user.email}');
               
               state = state.copyWith(
                 isAuthenticated: true,
@@ -86,8 +76,6 @@ class AuthNotifier extends StateNotifier<AuthState> {
               );
               return;
             } catch (e) {
-              print('⚠️ Failed to fetch user: $e');
-              // Token exists but API failed - still mark as authenticated for offline mode
               state = state.copyWith(
                 isAuthenticated: true,
                 isOnboarded: isOnboarded,
@@ -96,12 +84,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
               return;
             }
           }
-        } catch (e) {
-          print('⚠️ Token validation error: $e');
-        }
+        } catch (e) {}
       }
       
-      print('❌ No valid token, setting as logged out');
       await _clearAuthData();
       state = state.copyWith(
         isAuthenticated: false,
@@ -109,8 +94,6 @@ class AuthNotifier extends StateNotifier<AuthState> {
         isLoading: false,
       );
     } catch (e) {
-      print('❌ Init error: $e');
-      // Fallback: try to read basic auth state without API calls
       try {
         final prefs = await SharedPreferences.getInstance().timeout(
           const Duration(seconds: 1),
@@ -132,9 +115,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
               );
               return;
             }
-          } catch (_) {
-            // Token parsing failed, treat as invalid
-          }
+          } catch (_) {}
         }
         
         state = state.copyWith(
@@ -143,13 +124,11 @@ class AuthNotifier extends StateNotifier<AuthState> {
           isLoading: false,
         );
       } catch (storageError) {
-        print('❌ Storage error: $storageError');
-        // Complete fallback - assume fresh install
         state = state.copyWith(
           isAuthenticated: false,
           isOnboarded: false,
           isLoading: false,
-          error: null, // Don't show error for fresh install
+          error: null,
         );
       }
     }
@@ -298,30 +277,18 @@ class AuthNotifier extends StateNotifier<AuthState> {
     state = state.copyWith(error: null);
   }
   
-  // Auto-update location in background
   Future<void> _updateLocationInBackground() async {
     try {
-      print('📍 Auto-detecting location...');
-      
       final locationData = await LocationService.getCurrentLocationWithAddress();
       
       if (locationData != null) {
-        print('📍 Location detected: ${locationData['address']}');
-        
-        // Update backend
         await ApiService.instance.updateLocation(
           locationData['latitude'],
           locationData['longitude'],
           locationData['address'],
         );
-        
-        print('✅ Location updated on server');
-      } else {
-        print('⚠️ Location permission denied or unavailable');
       }
-    } catch (e) {
-      print('❌ Location update failed: $e');
-    }
+    } catch (e) {}
   }
   
   // Private methods

@@ -17,42 +17,28 @@ import 'utils/constants.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  // Initialize Firebase (optional)
   try {
     await Firebase.initializeApp();
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
-  } catch (e) {
-    print('Firebase not configured: $e');
-  }
+  } catch (e) {}
   
-  // Initialize Hive
   try {
     await Hive.initFlutter();
-  } catch (e) {
-    print('Hive init failed: $e');
-  }
+  } catch (e) {}
   
-  // Initialize SharedPreferences
   try {
     await SharedPreferences.getInstance();
-  } catch (e) {
-    print('SharedPreferences init failed: $e');
-  }
+  } catch (e) {}
   
-  // Initialize Services (non-blocking)
-  ApiService.initialize().catchError((e) {
-    print('API Service init failed: $e');
-  });
+  await ApiService.initialize();
+  await AuthService.initialize();
   
-  AuthService.initialize().catchError((e) {
-    print('Auth Service init failed: $e');
-  });
-  
-  // Set preferred orientations
-  await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]);
+  try {
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+  } catch (e) {}
   
   runApp(
     ProviderScope(
@@ -82,26 +68,34 @@ class _HeartLinkAppState extends ConsumerState<HeartLinkApp> {
     return MaterialApp.router(
       title: AppConstants.appName,
       debugShowCheckedModeBanner: false,
-      
-      // Theme
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
-      
-      // Routing
       routerConfig: router,
-      
-      // Localization
       supportedLocales: const [
         Locale('en', 'US'),
         Locale('hi', 'IN'),
       ],
-      
-      // Builder for global configurations
       builder: (context, child) {
+        ErrorWidget.builder = (FlutterErrorDetails details) {
+          return Scaffold(
+            backgroundColor: Colors.white,
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.error_outline, size: 64, color: Colors.red),
+                  SizedBox(height: 16),
+                  Text('Error', style: TextStyle(fontSize: 20)),
+                ],
+              ),
+            ),
+          );
+        };
+        
         return MediaQuery(
           data: MediaQuery.of(context).copyWith(
-            textScaler: TextScaler.noScaling, // Prevent text scaling
+            textScaler: TextScaler.noScaling,
           ),
           child: child!,
         );

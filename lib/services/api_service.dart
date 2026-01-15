@@ -22,21 +22,12 @@ abstract class ApiService {
     try {
       _dio = Dio();
       
-      // Set timeouts
       _dio.options.connectTimeout = const Duration(seconds: 5);
       _dio.options.receiveTimeout = const Duration(seconds: 5);
       _dio.options.sendTimeout = const Duration(seconds: 5);
       
-      // Add interceptors
-      _dio.interceptors.add(LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-        logPrint: (obj) => print(obj),
-      ));
-      
       _dio.interceptors.add(InterceptorsWrapper(
         onRequest: (options, handler) async {
-          // Add auth token
           final token = await _storage.read(key: AppConstants.accessTokenKey);
           if (token != null) {
             options.headers['Authorization'] = 'Bearer $token';
@@ -45,10 +36,8 @@ abstract class ApiService {
           handler.next(options);
         },
         onError: (error, handler) async {
-          // Handle token refresh
           if (error.response?.statusCode == 401) {
             await _handleTokenRefresh();
-            // Retry request
             final newToken = await _storage.read(key: AppConstants.accessTokenKey);
             if (newToken != null) {
               error.requestOptions.headers['Authorization'] = 'Bearer $newToken';
@@ -62,10 +51,7 @@ abstract class ApiService {
       ));
       
       _instance = ApiService(_dio);
-      print('✅ API Service initialized');
     } catch (e) {
-      print('❌ API Service initialization failed: $e');
-      // Create instance anyway to prevent null errors
       _dio = Dio();
       _instance = ApiService(_dio);
     }
